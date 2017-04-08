@@ -1,0 +1,74 @@
+
+<div class="modal-header">
+    <button id="cerrar" type="button" class="close" ng-click="alumnoCtrl.cerrar()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4><span style="font-weight:bold;">Agregar Alumno</span></h4>
+</div>
+
+<div id="modal-alumno" class="modal-body">
+    <form role="form" ng-submit="alumnoCtrl.guardar()">
+        
+        <div class="form-group">
+
+            <div id="alert_info_id" class={{alumnoCtrl.alert}} role="alert" ng-show="alumnoCtrl.mostarMensaje">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <strong>{{alumnoCtrl.alertType}} </strong> {{alumnoCtrl.alertMsg}}
+            </div>
+        </div>
+        <div class="form-group pull-right">
+        <button id="guardar" class="btn btn-primary form-control" type="submit">
+            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Guardar
+        </button>
+        </div>
+        <div class="form-group" style="padding-top: 5px"></div>
+        <div class="form-group">
+            <label for="dni">DNI</label>
+            <input id="dni" ng-model="alumnoCtrl.dni" class="form-control" type="text" placeholder="Ingrese el DNI sin puntos ej. 31456789" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" ng-model="alumnoCtrl.nombre" class="form-control" type="text" placeholder="Ingrese el nombre completo" required>
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input id="apellido" ng-model="alumnoCtrl.apellido" class="form-control" type="text" placeholder="Ingrese el apellido" required>
+        </div>
+        <div class="form-group">
+            <label for="nacionalidad">Nacionalidad</label>
+            <input id="nacionalidad" ng-model="alumnoCtrl.nacionalidad" class="form-control" type="text" placeholder="Ingrese la nacionalidad" required>
+        </div>
+        <div class="form-group">
+            <label for="fechaNac">Fecha de Nacimiento</label>
+            <input id="fechaNac" ng-model="alumnoCtrl.fecnac" class="form-control" type="text" placeholder="Ingrese la fecha nacimiento ej. 01/12/1985" required>
+        </div>
+         <div class="form-group">
+            <label for="sexo">Sexo</label>
+            <input id="sexo" ng-model="alumnoCtrl.sexo" class="form-control" type="text" placeholder="Ingrese el sexo ej. M o F" required>
+        </div>
+        <div class="form-group">
+            <label for="provincia">Provincia</label>
+            <input id="provincia" ng-model="alumnoCtrl.provincia" class="form-control" type="text" placeholder="Ingrese la provincia" required>
+        </div>
+        <div class="form-group">
+            <label for="localidad">Localidad</label>
+            <input id="localidad" ng-model="alumnoCtrl.localidad" class="form-control" type="text" placeholder="Ingrese la localidad" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" ng-model="alumnoCtrl.email" class="form-control" type="text" placeholder="Ingrese el email" required>
+        </div>
+        <div class="form-group">
+            <label for="fijo">Teléfono</label>
+            <input id="fijo" ng-model="alumnoCtrl.fijo" class="form-control" type="text" placeholder="Ingrese el teléfono fijo" required>
+        </div>
+        <div class="form-group">
+            <label for="celular">Celular</label>
+            <input id="celular" ng-model="alumnoCtrl.celular" class="form-control" type="text" placeholder="Ingrese el teléfono celular" required>
+        </div>
+        <div class="form-group">
+            <label for="ocupacion">Ocupacion</label>
+            <input id="ocupacion" ng-model="alumnoCtrl.ocupacion" class="form-control" type="text" placeholder="Ingrese la ocupacion laboral" required>
+        </div>
+
+    </form>
+</div>
+
