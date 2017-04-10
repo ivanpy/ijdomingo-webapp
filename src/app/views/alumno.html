@@ -1,0 +1,36 @@
+<div class="container">
+<h1 class="page-header">Alumnos</h1>
+<br >
+
+<div class="spacing-less pull-right">
+	<button type="button" class="btn btn-primary" ng-click="homeCtrl.mostrarAgregarAlumnoModal()">
+	 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Agregar Alumno
+	</button>
+</div>
+<table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                    	<th>DNI</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Localidad</th>
+                        <th>Email</th>
+                        <th>Celular</th>
+                        <th>Ocupacion</th>
+                        <th>Sexo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="alumno in homeCtrl.alumnos">
+                        <td>{{alumno.dni}}</td>
+                        <td>{{alumno.nombre}}</td>
+                        <td>{{alumno.apellido}}</td>
+                        <td>{{alumno.localidad}}</td>
+                        <td>{{alumno.email}}</td>
+                        <td>{{alumno.celular}}</td>
+                        <td>{{alumno.ocupacion}}</td>
+                        <td>{{alumno.sexo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+</div>

@@ -2,13 +2,7 @@
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-       <a class="navbar-brand" href="#">
+       <a class="navbar-brand" href ui-sref="home">
         <img alt="Logo" src="indice.png" height="25" width="25">
       </a>
     </div>
@@ -16,9 +10,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="NavController as navCtrl">
       <ul class="nav navbar-nav">
-        <li><a href="#">Inscripciones</a></li>
-        <li class="active"><a href="#">Alumnos</a></li>
-        <li><a href="#">Cursos</a></li>
+        <li><a href ui-sref="home">Inscripciones</a></li>
+        <li><a href ui-sref="alumnos">Alumnos</a></li>
+        <li><a href ui-sref="cursos">Cursos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href ng-click="navCtrl.mostrarLoginModal()">Login</a></li>

@@ -1,0 +1,22 @@
+<div class="container">
+<h1 class="page-header">Cursos</h1>
+<br >
+
+<div class="spacing-less pull-right">
+	<button type="button" class="btn btn-primary" ng-click="homeCtrl.mostrarAgregarCursoModal()">
+	 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Agregar Curso
+	</button>
+</div>
+<table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                    	<th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="curso in homeCtrl.cursos">
+                        <td>{{curso.nombre}}</td>
+                    </tr>
+                </tbody>
+            </table>
+</div>

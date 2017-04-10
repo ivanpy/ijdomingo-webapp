@@ -39,6 +39,18 @@
         controller: "HomeController",
         controllerAs: "homeCtrl"
       })
+    .state('alumnos', {
+        url: "/alumnos",
+        templateUrl: "app/views/alumno.html",
+        controller: "HomeController",
+        controllerAs: "homeCtrl"
+      })
+    .state('cursos', {
+        url: "/cursos",
+        templateUrl: "app/views/curso.html",
+        controller: "HomeController",
+        controllerAs: "homeCtrl"
+      })
   });
 
 })(angular)

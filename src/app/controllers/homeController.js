@@ -6,13 +6,23 @@ function HomeController(ApiService, $log, $uibModal){
   
   
 	self.titulo = 'Lista de Alumnos';
+	self.selected = null;
 	
 	// Metodo que genera la lista de alumnos
-	self.inicio = function () {
+	self.listaAlumnos = function () {
 		self.alumnos = [];
 		ApiService.obtenerAlumnos().then(function(response){
 	    	self.alumnos = response.data.alumnos;
 	    	//$log.warn("Alumnos: " + JSON.stringify(self.alumnos));
+		});
+	}
+
+	// Metodo que genera la lista de cursos
+	self.listaCursos = function () {
+		self.cursos = [];
+		ApiService.obtenerCursos().then(function(response){
+	    	self.cursos = response.data.curso;
+	    	//$log.warn("Cursos: " + JSON.stringify(self.cursos));
 		});
 	}
 
@@ -27,14 +37,37 @@ function HomeController(ApiService, $log, $uibModal){
 
 		modalInstance.result.then(function (resultado) {
       		if(resultado.toggl){
-      			self.inicio();
+      			self.listaAlumnos();
       		}
       		
     	}, function () {
     		// Cuando el modal se cierra
-    		self.inicio();
+    		self.listaAlumnos();
 		});
 	}
 
-	self.inicio();
+	// Metodo que llama al modal de agregar alumnos
+	self.mostrarAgregarCursoModal = function () {
+		var modalInstance = $uibModal.open({
+		    controller: 'CursoModalController',
+		    controllerAs: 'cursoCtrl',
+		    templateUrl: 'app/views/agregarCurso.html',
+		    size: 'lg'
+		});
+
+		modalInstance.result.then(function (resultado) {
+      		if(resultado.toggl){
+      			self.listaCursos();
+      		}
+      		
+    	}, function () {
+    		// Cuando el modal se cierra
+    		self.listaCursos();
+		});
+	}
+
+	self.listaAlumnos();
+	self.listaCursos();
+
+	
 }

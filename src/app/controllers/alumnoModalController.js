@@ -28,7 +28,6 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout) {
                 alerta("__exito_al_guardar");
            }, function (error) {
                 self.toggl = false;  
-                self.showMessage("_error");
                 alerta("__error_al_guardar");
            });
         // En caso de querer cerrar el modal automaticamente         
