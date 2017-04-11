@@ -4,7 +4,8 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     obtenerAlumnos: obtenerAlumnos,
     guardarAlumno: guardarAlumno,
     obtenerCursos: obtenerCursos,
-    guardarCurso: guardarCurso
+    guardarCurso: guardarCurso,
+    guardarInscripcion: guardarInscripcion
   };
 
   return service;
@@ -66,4 +67,21 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
           return response;
       });
     }
+
+    //*****************************//
+    //*Operaciones de Inscripcion *//
+    //*****************************//
+    // Metodo para guardar curso
+    function guardarInscripcion(body) {
+      var uri = __env.apiUrl + 'inscripcion/agregar';
+      return $http({
+          url: uri,
+          method: "POST",
+          data: body,
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
 });

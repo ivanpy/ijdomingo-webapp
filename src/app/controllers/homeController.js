@@ -1,11 +1,10 @@
 angular.module('app').controller('HomeController', HomeController);
     
-function HomeController(ApiService, $log, $uibModal){
+function HomeController(ApiService, $log, $uibModal, $timeout){
   
 	var self = this;
   
-  
-	self.titulo = 'Lista de Alumnos';
+  	self.mostarMensaje = false;
 	self.selected = null;
 	
 	// Metodo que genera la lista de alumnos
@@ -65,6 +64,87 @@ function HomeController(ApiService, $log, $uibModal){
     		self.listaCursos();
 		});
 	}
+
+	// Meotod que guarda los datos de alumnos
+    self.guardarInscripcion = function () {
+        var alumno = new alumnoJsonBody();
+        alumno.dni = self.dni;
+        alumno.nombre = self.nombre;
+        alumno.apellido = self.apellido;
+        alumno.nacionalidad = self.nacionalidad;
+        alumno.fecnac = self.fecnac;
+        alumno.sexo = self.sexo;
+        alumno.fijo = self.fijo;
+        alumno.celular = self.celular;
+        alumno.email = self.email;
+        alumno.provincia = self.provincia;
+        alumno.localidad = self.localidad;
+        alumno.ocupacion = self.ocupacion;
+        ApiService.guardarAlumno(alumno).then(function (response) {
+        	var insc = new inscripcionJsonBody();
+        	insc.fecinsc = Date.now();
+        	insc.curso = self.selected.nombre;
+        	insc.alumno = { "dni": self.dni, "nombre": self.nombre, "apellido": self.apellido };
+	        ApiService.guardarInscripcion(insc).then(function (response) {
+	            alerta("__exito_al_guardar");
+	        }, function (error) {
+	            alerta("__error_al_guardar");
+	        });
+        }, function (error) {
+            alerta("__error_al_guardar");
+        });
+    };
+
+	// Contrato para guardar alumnos
+    var inscripcionJsonBody = function () {
+        return {
+            "fecinsc" : "",
+            "curso" : "",
+            "alumno" : {"dni": "", "nombre": "", "apellido": ""},
+            "estadoc": false
+        }
+    }
+
+    // Contrato para guardar alumnos
+    var alumnoJsonBody = function () {
+        return {
+            "nombre" : "",
+            "apellido" : "",
+            "nacionalidad" : "",
+            "fecnac" : "",
+            "dni" : "",
+            "sexo" : "",
+            "email" : "",
+            "fijo" : "",
+            "celular" : "",
+            "provincia" : "",
+            "localidad" : "",
+            "ocupacion" : ""
+        }
+    }
+
+    // Metodo para traer la fecha local del sistema
+    var getDatetime = function() {
+  		return (new Date).toLocaleFormat("%A, %B %e, %Y");
+	};
+
+	// Metodo que muestra los mensajes de errores
+    var alerta = function (validation) {
+        self.mostarMensaje = true;
+        switch (validation) {
+            case "__error_al_guardar":
+                self.alertMsg = "Fallo el envio de la inscripcion";
+                self.alert = 'alert alert-danger alert-dismissible';
+                self.alertType = 'Error';
+                break;
+            case "__exito_al_guardar":
+                self.alertMsg = "Inscripción enviada con exito";
+                self.alert = 'alert alert-success alert-dismissible';
+                self.alertType = 'Exito';
+                break;
+        }
+        $timeout(function () {  self.mostarMensaje = false; }, 2000);
+    }
 
 	self.listaAlumnos();
 	self.listaCursos();
