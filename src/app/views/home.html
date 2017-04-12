@@ -4,10 +4,10 @@
     <div class="form-group">
         <div class={{homeCtrl.alert}} role="alert" ng-show="homeCtrl.mostarMensaje">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <strong>{{alumnoCtrl.alertType}} </strong> {{alumnoCtrl.alertMsg}}
+            <strong>{{homeCtrl.alertType}} </strong> {{homeCtrl.alertMsg}}
         </div>
     </div>
-    <form ng-submit="homeCtrl.guardarInscripcion()">
+    <form ng-submit="homeCtrl.enviar()">
     <div class="form-group pull-right">
     <button id="enviar" class="btn btn-primary form-control" type="submit">
         <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Enviar

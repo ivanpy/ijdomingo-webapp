@@ -1,6 +1,6 @@
 angular.module('app').controller('HomeController', HomeController);
     
-function HomeController(ApiService, $log, $uibModal, $timeout){
+function HomeController(ApiService, $log, $uibModal, $timeout, $window){
   
 	var self = this;
   
@@ -66,7 +66,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout){
 	}
 
 	// Meotod que guarda los datos de alumnos
-    self.guardarInscripcion = function () {
+    self.enviar = function () {
+    	//$window.alert("Seleccion :"+ self.selected.nombre);
         var alumno = new alumnoJsonBody();
         alumno.dni = self.dni;
         alumno.nombre = self.nombre;
@@ -81,26 +82,33 @@ function HomeController(ApiService, $log, $uibModal, $timeout){
         alumno.localidad = self.localidad;
         alumno.ocupacion = self.ocupacion;
         ApiService.guardarAlumno(alumno).then(function (response) {
-        	var insc = new inscripcionJsonBody();
-        	insc.fecinsc = Date.now();
-        	insc.curso = self.selected.nombre;
-        	insc.alumno = { "dni": self.dni, "nombre": self.nombre, "apellido": self.apellido };
-	        ApiService.guardarInscripcion(insc).then(function (response) {
-	            alerta("__exito_al_guardar");
-	        }, function (error) {
-	            alerta("__error_al_guardar");
-	        });
+        	self.guardarInscripcion();
         }, function (error) {
             alerta("__error_al_guardar");
         });
-    };
+    }
+
+    self.guardarInscripcion = function (){
+    	var insc = new inscripcionJsonBody();
+    	insc.dni = self.dni;
+    	insc.alumno = self.nombre + " " + self.apellido;
+    	insc.fecinsc = getDatetime();
+    	insc.curso = self.selected.nombre;
+        ApiService.guardarInscripcion(insc).then(function (response) {
+            alerta("__exito_al_guardar");
+        }, function (error) {
+        	$log.info(error);
+            alerta("__error_al_guardar");
+        });
+    }
 
 	// Contrato para guardar alumnos
     var inscripcionJsonBody = function () {
         return {
+        	"dni" : "",
+        	"alumno" : "",
             "fecinsc" : "",
             "curso" : "",
-            "alumno" : {"dni": "", "nombre": "", "apellido": ""},
             "estadoc": false
         }
     }
@@ -125,7 +133,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout){
 
     // Metodo para traer la fecha local del sistema
     var getDatetime = function() {
-  		return (new Date).toLocaleFormat("%A, %B %e, %Y");
+    	var d = new Date();
+  		return d.toString();
 	};
 
 	// Metodo que muestra los mensajes de errores
