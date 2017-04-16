@@ -15,7 +15,7 @@
    * Define Angular application
    *************************************************************************/
   
-  var ngModule = angular.module('app', ['ui.bootstrap', 'ui.router']);
+  var ngModule = angular.module('app', ['ui.bootstrap', 'ui.router', 'ngSanitize', 'ui.select']);
 
     /**************************************************************************
    * Make environment available in Angular

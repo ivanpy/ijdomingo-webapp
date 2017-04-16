@@ -1,6 +1,33 @@
-body {
-  min-height: 2000px;
-  padding-top: 70px;
+@import url(http://fonts.googleapis.com/css?family=Lato:400,900);
+
+* { 
+	margin: 0;
+	padding: 0px;
+} 
+
+body { 
+	background: #ffffff; 
+	margin: 0; 
+	height: 100%; 
+	color: #384452;
+	font-family: 'Lato', sans-serif;
+	font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6, label {
+	font-family: 'Lato', sans-serif;
+	font-weight: 700;
+}
+
+p { 
+	padding: 0; 
+	margin-bottom: 12px; 
+	font-family: 'Lato', sans-serif;
+	font-weight: 400;
+	font-size: 14px; 
+	line-height: 24px;
+	color: #384452; 
+	margin-top: 10px; 
 }
 
 .spacing-less {
@@ -8,3 +35,21 @@ body {
     margin-bottom: 10px;
 }
 
+.calendar-btn {
+	font-size: 20px;
+}
+
+.navbar-av {
+     margin-top: 50px;
+     background: #f5f5f5;
+}
+
+.navbar-brand {
+	font-family: 'Lato', sans-serif;
+    font-weight: 900;
+}
+
+nav > .container-fluid {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

@@ -3,9 +3,12 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
   var service = { 
     obtenerAlumnos: obtenerAlumnos,
     guardarAlumno: guardarAlumno,
+    editarAlumno: editarAlumno,
     obtenerCursos: obtenerCursos,
     guardarCurso: guardarCurso,
-    guardarInscripcion: guardarInscripcion
+    guardarInscripcion: guardarInscripcion,
+    obtenerPronvincias: obtenerPronvincias,
+    obtenerRegiones: obtenerRegiones
   };
 
   return service;
@@ -32,6 +35,19 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
       return $http({
           url: uri,
           method: "POST",
+          data: body,
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para editar alumno
+    function editarAlumno(body, id) {
+      var uri = __env.apiUrl + 'alumno/editar/' + id;
+      return $http({
+          url: uri,
+          method: "PUT",
           data: body,
           headers: { "Content-Type": "application/json" }
       }).then(function (response) {
@@ -82,6 +98,32 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
       }).then(function (response) {
           return response;
       });
+    }
+
+    //*****************************//
+    //*Datos en formato Json *//
+    //*****************************//
+    
+    // Datos de provincias
+    function obtenerPronvincias() {
+        var uri = "app/jsons/provincias.json";
+        return $http({ 
+          url: uri, 
+          method: "GET", 
+          headers: { "Content-Type": "application/json" }, 
+          isArray: true 
+        });
+    }
+
+    // Datos de regiones
+    function obtenerRegiones() {
+        var uri = "app/jsons/regiones.json";
+        return $http({ 
+          url: uri, 
+          method: "GET", 
+          headers: { "Content-Type": "application/json" }, 
+          isArray: true 
+        });
     }
 
 });
