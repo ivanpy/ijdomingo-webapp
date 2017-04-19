@@ -7,8 +7,9 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 	
 
 	self.resetInputs = function (){
+	  	self.envianInscripcion();
 	  	self.alumnoExistente = false;
-		self.selected = undefined;
+	  	self.cursoSeleccionado = undefined;
 		self.nacionalidad = undefined;
 		self.provincia = undefined;
 		self.sexo = undefined;
@@ -124,45 +125,59 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 
 	// Meotod que guarda los datos de alumnos
     self.guardarAlumno = function () {
-    	if(angular.isUndefined(self.selected)){
-    		alerta("__curso_vacio");
-    	}else{
-    		var alumno = self.datosDelAlumno();
-	        ApiService.guardarAlumno(alumno).then(function (response) {
-	        	self.guardarInscripcion();
-	        }, function (error) {
-	            alerta("__error_al_guardar");
-	        });
-    	}
+		var alumno = self.datosDelAlumno();
+        ApiService.guardarAlumno(alumno).then(function (response) {
+        	self.guardarInscripcion();
+        }, function (error) {
+            alerta("__error_al_guardar");
+        });
     }
 
     // Meotod que guarda los datos de alumnos
     self.editarAlumno = function () {
-    	if(angular.isUndefined(self.selected)){
-    		alerta("__curso_vacio");
-    	}else{
-    		var alumno = self.datosDelAlumno();
-	       ApiService.editarAlumno(alumno, self.id).then(function (response) {
-	        	self.guardarInscripcion();
-	        }, function (error) {
-	        	$log.error(error)
-	            alerta("__error_al_guardar");
-	        });
-    	}
+   		var alumno = self.datosDelAlumno();
+       	ApiService.editarAlumno(alumno, self.id).then(function (response) {
+			ApiService.buscarInscripcionPorDniYCurso(self.dni, self.cursoSeleccionado.nombre).then(function(response){
+				//$log.warn("Duplicado: " + JSON.stringify(response.data.resultadoInscripcion.length));
+		    	if(response.data.resultadoInscripcion.length > 0){
+		    		alerta("__advertencia_ya_inscripto");
+		    		self.resetInputs();
+		    	}else{
+		    		self.guardarInscripcion();
+		    	}
+			});
+        }, function (error) {
+        	$log.error(error)
+            alerta("__error_al_guardar");
+        });
     }
 
     self.enviar = function () {
-    	if(angular.isUndefined(self.selected)){
+    	if(angular.isUndefined(self.cursoSeleccionado)){
     		alerta("__curso_vacio");
     	}else{
-    		if(self.alumnoExistente){
-    			self.editarAlumno();
-    		}else{
-    			self.guardarAlumno();
-    		}
+			if(angular.isUndefined(self.provincia)){
+				alerta("__provincia_vacio");
+			}else{
+				if(angular.isUndefined(self.nacionalidad)){
+					alerta("__nacionalidad_vacio");
+				}else{
+					if(angular.isUndefined(self.sexo)){
+						alerta("__sexo_vacio");
+					}else{
+						self.enviandoInscripcion();
+						if(self.alumnoExistente){
+    						self.editarAlumno();
+    					}else{
+    						self.guardarAlumno();
+    					}
+					}
+				}
+			}
     	}
     }
 
+    		
     // Metodo para encontrar alumnos por DNI
     self.encontrarAlumno = function(){
     	if(!angular.isUndefined(self.dni)){
@@ -197,7 +212,7 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
     	insc.dni = self.dni;
     	insc.alumno = self.nombre + " " + self.apellido;
     	insc.fecinsc = getDatetime();
-    	insc.curso = self.selected.nombre;
+    	insc.curso = self.cursoSeleccionado.nombre;
         ApiService.guardarInscripcion(insc).then(function (response) {
             alerta("__exito_al_guardar");
             self.resetInputs();
@@ -236,6 +251,20 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         }
     }
 
+    self.enviandoInscripcion = function(){
+    	self.colorButton = "btn btn-default btn-lg";
+    	self.labelButton = "Enviando Inscripción";
+    	self.typeButton = "button";
+    	self.iconButton = "fa fa-spinner fa-pulse fa-lg fa-fw";
+    }
+
+    self.envianInscripcion = function(){
+    	self.colorButton = "btn btn-success btn-lg";
+    	self.labelButton = "Enviar Inscripción";
+    	self.typeButton = "submit";
+    	self.iconButton = "glyphicon glyphicon-send";
+    }
+
     // Metodo para traer la fecha local del sistema
     var getDatetime = function() {
     	var fec = Date.parse(new Date()).toString('dd/MM/yyyy');
@@ -247,22 +276,42 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         self.mostarMensaje = true;
         switch (validation) {
             case "__error_al_guardar":
-                self.alertMsg = "Fallo el envio de la inscripcion";
+                self.alertMsg = "Fallo el envio de la inscripción";
                 self.alert = 'alert alert-danger alert-dismissible';
                 self.alertType = 'Error';
                 break;
             case "__exito_al_guardar":
-                self.alertMsg = "Inscripción enviada con exito";
+                self.alertMsg = "Inscripción enviada con éxito";
                 self.alert = 'alert alert-success alert-dismissible';
                 self.alertType = 'Exito';
                 break;
             case "__curso_vacio":
                 self.alertMsg = "Seleccione un curso";
                 self.alert = 'alert alert-info alert-dismissible';
-                self.alertType = 'Info';
+                self.alertType = 'Información';
+                break;
+            case "__nacionalidad_vacio":
+                self.alertMsg = "Seleccione una nacionalidad";
+                self.alert = 'alert alert-info alert-dismissible';
+                self.alertType = 'Información';
+                break;
+            case "__provincia_vacio":
+                self.alertMsg = "Seleccione una provincia";
+                self.alert = 'alert alert-info alert-dismissible';
+                self.alertType = 'Información';
+                break;
+            case "__sexo_vacio":
+                self.alertMsg = "Seleccione un sexo";
+                self.alert = 'alert alert-info alert-dismissible';
+                self.alertType = 'Información';
+                break;
+            case "__advertencia_ya_inscripto":
+                self.alertMsg = "Usted ya se encuentra inscripto en este curso";
+                self.alert = 'alert alert-warning alert-dismissible';
+                self.alertType = 'Atención';
                 break;
         }
-        $timeout(function () {  self.mostarMensaje = false; }, 3000);
+        $timeout(function () {  self.mostarMensaje = false; }, 5000);
     }
 
     self.today = function() {

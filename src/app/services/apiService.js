@@ -8,7 +8,8 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     guardarCurso: guardarCurso,
     guardarInscripcion: guardarInscripcion,
     obtenerPronvincias: obtenerPronvincias,
-    obtenerRegiones: obtenerRegiones
+    obtenerRegiones: obtenerRegiones,
+    buscarInscripcionPorDniYCurso: buscarInscripcionPorDniYCurso
   };
 
   return service;
@@ -100,6 +101,18 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
       });
     }
 
+    // Metodo para buscar las inscripciones por dni y curso
+    function buscarInscripcionPorDniYCurso(dni, curso) {
+      var uri = __env.apiUrl + 'inscripcion/buscar/'+dni+'/'+curso;
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
     //*****************************//
     //*Datos en formato Json *//
     //*****************************//
@@ -125,5 +138,4 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
           isArray: true 
         });
     }
-
 });

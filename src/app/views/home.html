@@ -1,25 +1,27 @@
-<nav class="navbar-av">
-    <div class="container-fluid">
-        <div class="navbar-brand">
-            Inscripción Online
-            <br>
+<form ng-submit="homeCtrl.enviar()">
+    <nav class="navbar-av">
+        <div class="container-fluid">
+            <div class="navbar-brand">
+                Inscripción Online
+            </div>
+            <div class="btn-group pull-right">
+                <button id="enviar" class={{homeCtrl.colorButton}} type={{homeCtrl.typeButton}}>
+                   <strong style="font-size: 14px;"> <i class={{homeCtrl.iconButton}}></i> {{homeCtrl.labelButton}}</strong>
+                </button>
+            </div>
         </div>
-    </div>
-</nav>
-<div class="container">
+    </nav>
+    
     <div class="form-group">
         <div class={{homeCtrl.alert}} role="alert" ng-show="homeCtrl.mostarMensaje">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <strong>{{homeCtrl.alertType}} </strong> {{homeCtrl.alertMsg}}
+            <div class="alert-custom">
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                <strong>{{homeCtrl.alertMsg}}</strong>
+            </div>
         </div>
     </div>
-    <form ng-submit="homeCtrl.editarAlumno()">
-    <div class="form-group pull-right">
-    <button id="enviar" class="btn btn-primary form-control" type="submit">
-        <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Enviar
-    </button>
-    </div>
-    <div class="form-group" style="padding-top: 25px"></div>
+    <div class="container">
+    <div class="form-group"></div>
         <div class="panel-group">
           <div class="panel panel-primary">
             <div class="panel-heading">
@@ -27,15 +29,15 @@
                 Curso
               </h4>
             </div>
-        	  <div class="panel-body">
-        	    <!--  <div class="form-group">
-        	  		<select class="form-control" ng-model="homeCtrl.selected" 
-        	  		ng-options="curso as curso.nombre for curso in homeCtrl.cursos track by curso.nombre">
+              <div class="panel-body">
+                <!--  <div class="form-group">
+                    <select class="form-control" ng-model="homeCtrl.selected" 
+                    ng-options="curso as curso.nombre for curso in homeCtrl.cursos track by curso.nombre">
                         <option value="">-- Seleccione un Curso --</option>       
                     </select>
-        		</div> -->
+                </div> -->
                 <div class="form-group">
-                    <ui-select ng-model="homeCtrl.selected" theme="selectize">
+                    <ui-select ng-model="homeCtrl.cursoSeleccionado" theme="selectize">
                     <ui-select-match placeholder=" -- Busca y selecciona el curso --" required>
                         {{$select.selected.nombre}}
                     </ui-select-match>
@@ -44,7 +46,7 @@
                     </ui-select-choices>
                     </ui-select>
                 </div>
-        	  </div>
+              </div>
           </div>
           <div class="panel panel-primary">
             <div class="panel-heading">
@@ -56,15 +58,15 @@
                 <div class="row">
                     <div class="col-md-6">
                          <div class="form-group">
-                            <label for="dni">DNI</label>
+                            <label for="dni">DNI*</label>
                             <input id="dni" ng-model="homeCtrl.dni" class="form-control" type="text" placeholder="Ingrese el DNI sin puntos ej. 31456789" ng-blur="homeCtrl.encontrarAlumno()" required>
                         </div>
                         <div class="form-group">
-                            <label for="nombre">Nombre</label>
+                            <label for="nombre">Nombre*</label>
                             <input id="nombre" ng-model="homeCtrl.nombre" class="form-control" type="text" placeholder="Ingrese el nombre completo" required>
                         </div>
                         <div class="form-group">
-                            <label for="nacionalidad">Nacionalidad</label>
+                            <label for="nacionalidad">Nacionalidad*</label>
                             <ui-select ng-model="homeCtrl.nacionalidad" theme="selectize">
                             <ui-select-match placeholder=" -- Busca y selecciona la nacionalidad --">
                                 {{$select.selected.gentilicio}}
@@ -76,7 +78,7 @@
                             </ui-select>
                         </div>
                         <div class="form-group">
-                            <label for="provincia">Provincia</label>
+                            <label for="provincia">Provincia*</label>
                             <ui-select ng-model="homeCtrl.provincia" theme="selectize">
                             <ui-select-match placeholder=" -- Busca y selecciona la provincia --">
                                 {{$select.selected.nombre}}
@@ -88,10 +90,10 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input id="email" ng-model="homeCtrl.email" class="form-control" type="text" placeholder="Ingrese el email" required>
+                            <input id="email" ng-model="homeCtrl.email" class="form-control" type="email" placeholder="Ingrese una dirección correo válida">
                         </div>
                         <div class="form-group">
-                            <label for="celular">Celular</label>
+                            <label for="celular">Celular*</label>
                             <input id="celular" ng-model="homeCtrl.celular" class="form-control" type="text" placeholder="Ingrese el teléfono celular" required>
                         </div>
 
@@ -99,7 +101,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="fechaNac">Fecha de Nacimiento (dia/mes/año): </label>
+                            <label for="fechaNac">Fecha de Nacimiento (dia/mes/año)*: </label>
                              <p class="input-group">
                               <input type="text" class="form-control" uib-datepicker-popup='dd/MM/yyyy' ng-model="homeCtrl.fecnac" is-open="homeCtrl.popup1.opened" datepicker-options="homeCtrl.dateOptions" ng-required="true" close-text="Close" alt-input-formats="homeCtrl.altInputFormats" placeholder="Ej. 01/31/1985"/>
                               <span class="input-group-btn">
@@ -108,11 +110,11 @@
                             </p>
                         </div>
                         <div class="form-group">
-                            <label for="apellido">Apellido</label>
+                            <label for="apellido">Apellido*</label>
                             <input id="apellido" ng-model="homeCtrl.apellido" class="form-control" type="text" placeholder="Ingrese el apellido" required>
                         </div>
                         <div class="form-group">
-                            <label for="sexo">Sexo</label>
+                            <label for="sexo">Sexo*</label>
                             <ui-select ng-model="homeCtrl.sexo" theme="selectize">
                             <ui-select-match placeholder=" -- Selecciona el sexo --">
                                 {{$select.selected.nombre}}
@@ -123,21 +125,22 @@
                             </ui-select>
                         </div>
                         <div class="form-group">
-                            <label for="localidad">Localidad</label>
+                            <label for="localidad">Localidad*</label>
                             <input id="localidad" ng-model="homeCtrl.localidad" class="form-control" type="text" placeholder="Ingrese la localidad" required>
                         </div>
                         <div class="form-group">
                             <label for="fijo">Teléfono</label>
-                            <input id="fijo" ng-model="homeCtrl.fijo" class="form-control" type="text" placeholder="Ingrese el teléfono fijo" required>
+                            <input id="fijo" ng-model="homeCtrl.fijo" class="form-control" type="text" placeholder="Ingrese el teléfono fijo">
                         </div>
                         <div class="form-group">
-                            <label for="ocupacion">Ocupacion</label>
-                            <input id="ocupacion" ng-model="homeCtrl.ocupacion" class="form-control" type="text" placeholder="Ingrese la ocupacion laboral" required>
+                            <label for="ocupacion">Ocupación</label>
+                            <input id="ocupacion" ng-model="homeCtrl.ocupacion" class="form-control" type="text" placeholder="Ingrese la ocupacion laboral">
                         </div>
                     </div>
                 </div>
               </div>
           </div>
         </div>
-    </form> 
-</div>
+        <span class="label label-info">(*) Campos obligatorios</span>
+    </div>
+</form> 
