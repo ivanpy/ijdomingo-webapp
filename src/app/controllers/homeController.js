@@ -5,7 +5,6 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 	var self = this;
   	self.mostarMensaje = false;
 	
-
 	self.resetInputs = function (){
 	  	self.envianInscripcion();
 	  	self.alumnoExistente = false;
@@ -152,6 +151,7 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         });
     }
 
+    // Meotod para el evento submit
     self.enviar = function () {
     	if(angular.isUndefined(self.cursoSeleccionado)){
     		alerta("__curso_vacio");
@@ -207,6 +207,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
     	
     }
 
+
+    // Metodo que llama al endpoint para guardar la inscripcion
     self.guardarInscripcion = function (){
     	var insc = new inscripcionJsonBody();
     	insc.dni = self.dni;
@@ -251,6 +253,7 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         }
     }
 
+    // Metodo para manejar los estilos del boton cuando esta enviando la inscripcion
     self.enviandoInscripcion = function(){
     	self.colorButton = "btn btn-default btn-lg";
     	self.labelButton = "Enviando Inscripción";
@@ -258,6 +261,7 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
     	self.iconButton = "fa fa-spinner fa-pulse fa-lg fa-fw";
     }
 
+    // Metodo para manejar los estilos del boton de enviar inscripcion
     self.envianInscripcion = function(){
     	self.colorButton = "btn btn-success btn-lg";
     	self.labelButton = "Enviar Inscripción";

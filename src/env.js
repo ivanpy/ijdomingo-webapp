@@ -23,6 +23,6 @@
   // API url
   // For demo purposes we fetch from local file in this plunk
   // In your application this can be a url like https://api.github.com
-  window.__env.apiUrl = environment == 'Local' ? 'http://localhost:1245/api/' : 'https://ijdomingo-api.herokuapp.com/api/';
+  window.__env.apiUrl = environment == 'Prod' ? 'https://ijdomingo-api-prod.herokuapp.com' : environment == 'Dev' ? 'https://ijdomingo-api.herokuapp.com/api/' : 'http://localhost:1245/api/' ;
 
 }(this));
