@@ -16,7 +16,7 @@
         <li ng-if="navCtrl.user" ui-sref-active="active"><a href ui-sref="cursos">Cursos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li ui-sref-active="active"><a href ng-click="navCtrl.mostrarLoginModal()">Login</a></li>
+        <li ng-if="navCtrl.user" ui-sref-active="active"><a href ng-click="navCtrl.mostrarLoginModal()">Login</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

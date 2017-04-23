@@ -35,6 +35,11 @@ p {
     margin-bottom: 10px;
 }
 
+.spacing {
+    padding-top: 10px;
+    padding-top-bottom: 10px;
+}
+
 .spacing-big {
     margin-top: 119px;
 }
