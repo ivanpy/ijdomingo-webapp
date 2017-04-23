@@ -1,6 +1,6 @@
 <form ng-submit="homeCtrl.enviar()">
-    <nav class="navbar-av">
-        <div class="container-fluid" style="padding-top: 10px;">
+    <nav class="navbar-av navbar-fixed-top">
+        <div class="container" style="padding-top: 10px;">
             <div class="navbar-brand">
                 Inscripción Online
             </div>
@@ -11,15 +11,17 @@
             </div>
         </div>
     </nav>
-    
-    <div class="form-group">
+    <div class="spacing-big"></div>
+    <nav class="navbar-av navbar-fixed-top">
         <div class={{homeCtrl.alert}} role="alert" ng-show="homeCtrl.mostarMensaje">
             <div class="alert-custom">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                <strong>{{homeCtrl.alertMsg}}</strong>
+                <button type="button" class="close" ng-click="homeCtrl.dismissAlert()">&times;</button>
+                <i class={{homeCtrl.icon}}></i>
+                {{homeCtrl.alertMsg}}
             </div>
         </div>
-    </div>
+    </nav>
+
     <div class="container">
     <div class="form-group"></div>
         <div class="panel-group">
@@ -141,6 +143,6 @@
               </div>
           </div>
         </div>
-        <span class="label label-info">(*) Campos obligatorios</span>
+        <span class="label label-default">(*) Campos obligatorios</span>
     </div>
 </form> 

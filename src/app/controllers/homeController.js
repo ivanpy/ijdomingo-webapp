@@ -280,43 +280,47 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         self.mostarMensaje = true;
         switch (validation) {
             case "__error_al_guardar":
+                self.icon = 'glyphicon glyphicon-remove-sign';
                 self.alertMsg = "Fallo el envio de la inscripción";
-                self.alert = 'alert alert-danger alert-dismissible';
-                self.alertType = 'Error';
+                self.alert = 'alert alert-danger ui-notification';
                 break;
             case "__exito_al_guardar":
+                self.icon = 'glyphicon glyphicon-ok-sign';
                 self.alertMsg = "Inscripción enviada con éxito";
-                self.alert = 'alert alert-success alert-dismissible';
-                self.alertType = 'Exito';
+                self.alert = 'alert alert-success ui-notification';
                 break;
             case "__curso_vacio":
+                self.icon = 'glyphicon glyphicon-info-sign';
                 self.alertMsg = "Seleccione un curso";
-                self.alert = 'alert alert-info alert-dismissible';
-                self.alertType = 'Información';
+                self.alert = 'alert alert-info ui-notification';
                 break;
             case "__nacionalidad_vacio":
+                self.icon = 'glyphicon glyphicon-info-sign';
                 self.alertMsg = "Seleccione una nacionalidad";
-                self.alert = 'alert alert-info alert-dismissible';
-                self.alertType = 'Información';
+                self.alert = 'alert alert-info ui-notification';
                 break;
             case "__provincia_vacio":
+                self.icon = 'glyphicon glyphicon-info-sign';
                 self.alertMsg = "Seleccione una provincia";
-                self.alert = 'alert alert-info alert-dismissible';
-                self.alertType = 'Información';
+                self.alert = 'alert alert-info ui-notification';
                 break;
             case "__sexo_vacio":
+                self.icon = 'glyphicon glyphicon-info-sign';
                 self.alertMsg = "Seleccione un sexo";
-                self.alert = 'alert alert-info alert-dismissible';
-                self.alertType = 'Información';
+                self.alert = 'alert alert-info ui-notification';
                 break;
             case "__advertencia_ya_inscripto":
+                self.icon = 'glyphicon glyphicon-exclamation-sign';
                 self.alertMsg = "Usted ya se encuentra inscripto en este curso";
-                self.alert = 'alert alert-warning alert-dismissible';
-                self.alertType = 'Atención';
+                self.alert = 'alert alert-warning ui-notification';
                 break;
         }
         $timeout(function () {  self.mostarMensaje = false; }, 5000);
     }
+
+    self.dismissAlert = function() {
+        self.mostarMensaje = false;
+    };
 
     self.today = function() {
     	self.fecnac = new Date(1980, 1, 1);
