@@ -20,6 +20,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         self.celular = "";
         self.email = "";
         self.localidad = "";
+        self.domicilio = "";
+        self.barrio = "";
         self.ocupacion = "";
         self.listaAlumnos();
 	}
@@ -118,6 +120,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 	        alumno.email = self.email;
 	        alumno.provincia = self.provincia.nombre;
 	        alumno.localidad = self.localidad;
+            alumno.domicilio = self.domicilio;
+            alumno.barrio = self.barrio;
 	        alumno.ocupacion = self.ocupacion;
 	        return alumno;
 	}
@@ -201,6 +205,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 		        self.email = alumno.email;
 		        self.provincia = prov;
 		        self.localidad = alumno.localidad;
+                self.domicilio = alumno.domicilio;
+                self.barrio = alumno.barrio;
 		        self.ocupacion = alumno.ocupacion;
     		}
     	}
@@ -249,6 +255,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
             "celular" : "",
             "provincia" : "",
             "localidad" : "",
+            "domicilio" : "",
+            "barrio" : "",
             "ocupacion" : ""
         }
     }
@@ -268,6 +276,25 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
     	self.typeButton = "submit";
     	self.iconButton = "glyphicon glyphicon-send";
     }
+    // Metodo para mostrar modal del confirmacion para borrar un curso
+    self.borrarOnClick = function(index) {
+        bootbox.confirm({
+            title: "Borrar Curso",
+            message: "¿Estas seguro que desea borrar este curso?",
+            buttons: {
+                cancel: {
+                    label: '<i class="fa fa-times"></i> Cancelar'
+                },
+                confirm: {
+                    label: '<i class="fa fa-check"></i> Confirmar'
+                }
+            },
+            callback: function (result) {
+                console.log('This was logged in the callback: ' + index);
+            }
+        });
+    };
+
 
     // Metodo para traer la fecha local del sistema
     var getDatetime = function() {
