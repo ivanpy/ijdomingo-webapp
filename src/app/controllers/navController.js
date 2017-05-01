@@ -4,7 +4,7 @@ function NavController($log, $uibModal){
   
 	var self = this;
 
-	self.user = false;
+	self.user = true;
 	// Metodo que llama al modal de login
 	self.mostrarLoginModal = function () {
 		var modalInstance = $uibModal.open({

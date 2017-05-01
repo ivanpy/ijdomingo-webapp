@@ -1,11 +1,32 @@
 angular.module('app').controller('CursoModalController', CursoModalController);
 
-function CursoModalController(ApiService, $uibModalInstance, $timeout) {
+function CursoModalController($log, ApiService, $uibModalInstance, $timeout, cursoEdit) {
 
     var self = this;
 
-    self.mostarMensaje = false;
-    self.toggl = false;    
+    
+
+    var init = function () {
+        self.mostarMensaje = false;
+        self.toggl = false;    
+        self.stateEdition = '';
+        if(!angular.isUndefined(cursoEdit.id)){
+            self.titulo = "Editar Curso";
+            self.id = cursoEdit.id;
+            self.nombre = cursoEdit.nombre;
+        }else{
+            self.titulo = "Agregar Nuevo Curso";
+            self.nombre = '';
+        }
+    }
+
+    self.onClickGuardar = function (){
+        if(self.titulo == 'Agregar Nuevo Curso'){
+            self.guardar();
+        }else{
+            self.editar();
+        }
+    }
 
     // Metodo que guarda los datos de alumnos
     self.guardar = function () {
@@ -21,6 +42,19 @@ function CursoModalController(ApiService, $uibModalInstance, $timeout) {
         // En caso de querer cerrar el modal automaticamente         
         // $uibModalInstance.close(self);
         
+    };
+
+    self.editar = function () {
+        ApiService.editarCurso(self.id, { "nombre" : self.nombre })
+           .then(function (response) {
+                self.toggl = true; 
+                self.stateEdition = 'editado';
+                $uibModalInstance.close(self);
+           }, function (error) {
+                self.toggl = false;
+                self.stateEdition = 'error';
+                $uibModalInstance.close(self);
+           });
     };
 
     // Metodo que cierra el modal
@@ -44,6 +78,8 @@ function CursoModalController(ApiService, $uibModalInstance, $timeout) {
                 self.alertType = 'Exito';
                 break;
         }
-        $timeout(function () {  self.mostarMensaje = false; }, 1000);
+        $timeout(function () {  self.mostarMensaje = false; }, 2000);
     }
+
+    init();
 }

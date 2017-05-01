@@ -48,8 +48,14 @@
     .state('cursos', {
         url: "/cursos",
         templateUrl: "app/views/curso.html",
-        controller: "HomeController",
-        controllerAs: "homeCtrl"
+        controller: "CursoController",
+        controllerAs: "cursoCtrl"
+      })
+     .state('asistencia', {
+        url: "/asistencia",
+        templateUrl: "app/views/asistencia.html",
+        controller: "AsistenciaController",
+        controllerAs: "asiCtrl"
       })
   });
 

@@ -3,35 +3,48 @@
         <div class="navbar-brand">
             Cursos
         </div>
+
          <div class="btn-group pull-right">
-            <button id="curso" class="btn btn-success btn-lg" type="button" ng-click="homeCtrl.mostrarAgregarCursoModal()">
+            <button id="curso" class="btn btn-success btn-lg" type="button" ng-click="cursoCtrl.mostrarAgregarCursoModal()">
                <strong style="font-size: 14px;"> <i class="glyphicon glyphicon-plus-sign"></i> Agregar Curso</strong>
             </button>
         </div>
     </div>
 </nav>
-
-<div class="container">
 <div class="spacing-big"></div>
-<table class="table table-hover table-striped table-bordered">
-                <thead>
-                    <tr>
-                    	<th class="text-center">Nombre</th>
-                        <th class="text-center">Operaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="curso in homeCtrl.cursos">
-                        <td>{{curso.nombre}}</td>
-                        <td class="text-center">
-                            <a ng-click="homeCtrl.editarCurso($index)" class="btn btn-xs btn-warning"> 
-                                <i class="fa fa-pencil"></i> Editar
-                            </a>
-                            <a ng-click="homeCtrl.borrarCurso($index)" class="btn btn-xs btn-danger"> 
-                                <i class="fa fa-trash"></i> Borrar 
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <nav class="navbar-av navbar-fixed-top">
+        <div class={{cursoCtrl.alert}} role="alert" ng-show="cursoCtrl.mostarMensaje">
+            <div class="alert-custom">
+                <button type="button" class="close" ng-click="cursoCtrl.dismissAlert()">&times;</button>
+                <i class={{cursoCtrl.icon}}></i>
+                {{cursoCtrl.alertMsg}}
+            </div>
+        </div>
+    </nav>
+<div class="container">
+<div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+    <input id="search" type="text" class="form-control input-lg" name="search" placeholder="Buscar curso por nombre" ng-model="cursoNombre">
+  </div>
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+            	<th class="text-center">Nombre</th>
+                <th class="text-center">Operaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="curso in cursoCtrl.cursos | searchFor:cursoNombre">
+                <td>{{curso.nombre}}</td>
+                <td class="text-center">
+                    <a ng-click="cursoCtrl.mostrarAgregarCursoModal(curso._id, curso.nombre)" class="btn btn-xs btn-warning"> 
+                        <i class="fa fa-pencil"></i> Editar
+                    </a>
+                    <a ng-click="cursoCtrl.borrarOnClick($index, curso._id)" class="btn btn-xs btn-danger"> 
+                        <i class="fa fa-trash"></i> Borrar 
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

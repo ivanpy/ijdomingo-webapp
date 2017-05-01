@@ -21,6 +21,8 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout) {
         body.email = self.email;
         body.provincia = self.provincia;
         body.localidad = self.localidad;
+        body.domicilio = self.domicilio;
+        body.barrio = self.barrio;
         body.ocupacion = self.ocupacion;
         ApiService.guardarAlumno(body)
            .then(function (response) {
@@ -55,6 +57,8 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout) {
             "celular" : "",
             "provincia" : "",
             "localidad" : "",
+            "domicilio" : "",
+            "barrio" : "",
             "ocupacion" : ""
         }
     }

@@ -86,26 +86,6 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 		});
 	}
 
-	// Metodo que llama al modal de agregar alumnos
-	self.mostrarAgregarCursoModal = function () {
-		var modalInstance = $uibModal.open({
-		    controller: 'CursoModalController',
-		    controllerAs: 'cursoCtrl',
-		    templateUrl: 'app/views/agregarCurso.html',
-		    size: 'lg'
-		});
-
-		modalInstance.result.then(function (resultado) {
-      		if(resultado.toggl){
-      			self.listaCursos();
-      		}
-      		
-    	}, function () {
-    		// Cuando el modal se cierra
-    		self.listaCursos();
-		});
-	}
-
 	self.datosDelAlumno = function(){
 		var fec = Date.parse(self.fecnac).toString('dd/MM/yyyy');
 		var alumno = new alumnoJsonBody();
@@ -276,25 +256,6 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
     	self.typeButton = "submit";
     	self.iconButton = "glyphicon glyphicon-send";
     }
-    // Metodo para mostrar modal del confirmacion para borrar un curso
-    self.borrarOnClick = function(index) {
-        bootbox.confirm({
-            title: "Borrar Curso",
-            message: "¿Estas seguro que desea borrar este curso?",
-            buttons: {
-                cancel: {
-                    label: '<i class="fa fa-times"></i> Cancelar'
-                },
-                confirm: {
-                    label: '<i class="fa fa-check"></i> Confirmar'
-                }
-            },
-            callback: function (result) {
-                console.log('This was logged in the callback: ' + index);
-            }
-        });
-    };
-
 
     // Metodo para traer la fecha local del sistema
     var getDatetime = function() {

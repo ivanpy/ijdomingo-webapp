@@ -1,0 +1,40 @@
+<form ng-submit="asiCtrl.guardarOnClick()">
+<nav class="navbar-av navbar-fixed-top">
+    <div class="container" style="padding-top: 10px;">
+        <div class="navbar-brand">
+            Asistencia
+        </div>
+         <div class="btn-group pull-right">
+             <button id="registrar" class={{asiCtrl.colorButton}} type={{asiCtrl.typeButton}}>
+               <strong style="font-size: 14px;"> <i class={{asiCtrl.iconButton}}></i> {{asiCtrl.labelButton}}</strong>
+            </button>
+        </div>
+    </div>
+</nav>
+<div class="spacing-big"></div>
+    <nav class="navbar-av navbar-fixed-top">
+        <div class={{asiCtrl.alert}} role="alert" ng-show="asiCtrl.mostarMensaje">
+            <div class="alert-custom">
+                <button type="button" class="close" ng-click="asiCtrl.dismissAlert()">&times;</button>
+                <i class={{asiCtrl.icon}}></i>
+                {{asiCtrl.alertMsg}}
+            </div>
+        </div>
+    </nav>
+<div class="container">
+<div class="spacing-less"></div>
+  <div class="form-group">
+        <h4><strong>Puede Buscar por: DNI | Nombre de Alumno | Curso*</strong></h4>
+        <ui-select ng-model="asiCtrl.alumnoAsitencia" theme="selectize">
+        <ui-select-match placeholder=" -- Busca y selecciona el alumno para registrar la asistencia --">
+        &check; Curso&colon; {{$select.selected.curso}} &verbar; Dni&colon; {{$select.selected.dni}} &verbar; Alumno&colon; {{$select.selected.alumno}}
+        </ui-select-match>
+        <ui-select-header>Lista de Alumnos Inscriptos</ui-select-header>
+        <ui-select-choices group-by="'curso'" repeat="ins in asiCtrl.inscripciones | filter: $select.search track by ins.dni">
+            <div ng-bind-html="ins.alumno | highlight: $select.search"></div>
+            <small>DNI: {{ins.dni}}</small>
+        </ui-select-choices>
+        </ui-select>
+    </div>
+</div>
+</form>
