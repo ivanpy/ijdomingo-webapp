@@ -4,15 +4,20 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     obtenerAlumnos: obtenerAlumnos,
     guardarAlumno: guardarAlumno,
     editarAlumno: editarAlumno,
+    buscarAlumnoPorDni: buscarAlumnoPorDni,
     obtenerCursos: obtenerCursos,
     guardarCurso: guardarCurso,
     editarCurso: editarCurso,
     borrarCurso: borrarCurso,
     guardarInscripcion: guardarInscripcion,
     buscarInscripciones: buscarInscripciones,
+    buscarInscripcionPorId: buscarInscripcionPorId,
+    editarInscripcion: editarInscripcion,
     obtenerPronvincias: obtenerPronvincias,
     obtenerRegiones: obtenerRegiones,
     buscarInscripcionPorDniYCurso: buscarInscripcionPorDniYCurso,
+    borraInscripcion: borraInscripcion,
+    buscarInscripcionesPorCurso: buscarInscripcionesPorCurso,
     guardarAsistencia: guardarAsistencia,
     buscarAsistenciaPorDniYCurso: buscarAsistenciaPorDniYCurso
   };
@@ -83,6 +88,18 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
           url: uri,
           method: "PUT",
           data: body,
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para traer todos los alumnos 
+    function buscarAlumnoPorDni(dni) {
+      var uri = __env.apiUrl + 'alumno/buscar/dni/' + dni;
+      return $http({
+          url: uri,
+          method: "GET",
           headers: { "Content-Type": "application/json" }
       }).then(function (response) {
           return response;
@@ -160,9 +177,22 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
       });
     }
 
+    // Metodo para editar la inscripcion
+    function editarInscripcion(id, body) {
+      var uri = __env.apiUrl + 'inscripcion/editar/' + id;
+      return $http({
+          url: uri,
+          method: "PUT",
+          data: body,
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
     // Metodo para buscar las inscripciones por dni y curso
     function buscarInscripcionPorDniYCurso(dni, curso) {
-      var uri = __env.apiUrl + 'inscripcion/buscar/'+dni+'/'+curso;
+      var uri = __env.apiUrl + 'inscripcion/buscar/cursodni/' + dni + '/' + encodeURIComponent(curso);
       return $http({
           url: uri,
           method: "GET",
@@ -175,6 +205,42 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
      // Metodo para buscar todas las inscripciones
     function buscarInscripciones() {
       var uri = __env.apiUrl + 'inscripciones';
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para buscar las inscripciones por curso
+    function buscarInscripcionesPorCurso(curso) {
+      var uri = __env.apiUrl + 'inscripcion/buscar/curso/' + encodeURIComponent(curso);
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para borrar inscripciones
+    function borraInscripcion(id) {
+      var uri = __env.apiUrl + 'inscripcion/borrar/'+id;
+      return $http({
+          url: uri,
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+    // Metodo para buscar las inscripciones por id
+    function buscarInscripcionPorId(id) {
+      var uri = __env.apiUrl + 'inscripcion/buscar/id/' + id;
       return $http({
           url: uri,
           method: "GET",

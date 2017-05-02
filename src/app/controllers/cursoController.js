@@ -10,8 +10,22 @@ function CursoController(ApiService, $log, $uibModal, $timeout){
 		self.cursos = [];
 		ApiService.obtenerCursos().then(function(response){
 	    	self.cursos = response.data.curso;
+            self.exportarEXcel();
 		});
 	}
+
+    // Metodo que prepara los datos para exportar a excel
+    self.exportarEXcel = function(){
+        // Prepare Excel data:
+        self.fileName = "datos-de-cursos";
+        self.exportData = [];
+        // Headers:
+        self.exportData.push(["Nombre"]);
+        // Data:
+        angular.forEach(self.cursos, function(value, key) {
+            self.exportData.push([value.nombre]);
+        });
+    }
 
 	// Metodo que llama al modal de agregar alumnos
 	self.mostrarAgregarCursoModal = function (id, nombre) {

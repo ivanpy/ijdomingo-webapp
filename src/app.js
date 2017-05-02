@@ -39,6 +39,18 @@
         controller: "HomeController",
         controllerAs: "homeCtrl"
       })
+      .state('inscripciones', {
+        url: "/inscripciones",
+        templateUrl: "app/views/inscripcion.html",
+        controller: "InscripcionController",
+        controllerAs: "insCtrl"
+      })
+      .state('editar', {
+        url: "/editar/:id",
+        templateUrl: "app/views/editarInscripcion.html",
+        controller: "EditarInscripcionController",
+        controllerAs: "editInsCtrl"
+      })
     .state('alumnos', {
         url: "/alumnos",
         templateUrl: "app/views/alumno.html",
@@ -51,8 +63,8 @@
         controller: "CursoController",
         controllerAs: "cursoCtrl"
       })
-     .state('asistencia', {
-        url: "/asistencia",
+     .state('asistencias', {
+        url: "/asistencias",
         templateUrl: "app/views/asistencia.html",
         controller: "AsistenciaController",
         controllerAs: "asiCtrl"

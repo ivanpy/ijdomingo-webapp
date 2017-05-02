@@ -1,46 +1,17 @@
-angular.module('app').controller('HomeController', HomeController);
+angular.module('app').controller('EditarInscripcionController', EditarInscripcionController);
     
-function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter, uibDateParser){
+function EditarInscripcionController(ApiService, $log, $timeout, $state, $filter, uibDateParser, $stateParams){
   
 	var self = this;
   	self.mostarMensaje = false;
+    self.idInsc = $stateParams.id;
 	
-	self.resetInputs = function (){
-	  	self.envianInscripcion();
-	  	self.alumnoExistente = false;
-	  	self.cursoSeleccionado = undefined;
-		self.nacionalidad = undefined;
-		self.provincia = undefined;
-		self.sexo = undefined;
-   		self.dni = undefined;
-        self.nombre = "";
-        self.apellido = "";
-        self.fecnac = "";
-        self.fijo = "";
-        self.celular = "";
-        self.email = "";
-        self.localidad = "";
-        self.domicilio = "";
-        self.barrio = "";
-        self.ocupacion = "";
-        self.estadoc = false;
-        self.listaAlumnos();
-	}
-
 	self.sexos = 
             [
                 { nombre: "Masculino" },
                 { nombre: "Femenino" }
             ];
 	
-	// Metodo que genera la lista de alumnos
-	self.listaAlumnos = function () {
-		self.alumnos = [];
-		ApiService.obtenerAlumnos().then(function(response){
-	    	self.alumnos = response.data.alumnos;
-	    	//$log.warn("Alumnos: " + JSON.stringify(self.alumnos));
-		});
-	}
 
 	// Metodo que trae los datos de las provincias
 	self.obtenerPronvincias = function () {
@@ -63,29 +34,46 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 		self.cursos = [];
 		ApiService.obtenerCursos().then(function(response){
 	    	self.cursos = response.data.curso;
-	    	//$log.warn("Cursos: " + JSON.stringify(self.cursos));
+            self.buscarAlumnoYInscripcion();
 		});
 	}
 
-	// Metodo que llama al modal de agregar alumnos
-	self.mostrarAgregarAlumnoModal = function () {
-		var modalInstance = $uibModal.open({
-		    controller: 'AlumnoModalController',
-		    controllerAs: 'alumnoCtrl',
-		    templateUrl: 'app/views/agregarAlumno.html',
-		    size: 'lg'
-		});
-
-		modalInstance.result.then(function (resultado) {
-      		if(resultado.toggl){
-      			self.listaAlumnos();
-      		}
-      		
-    	}, function () {
-    		// Cuando el modal se cierra
-    		self.listaAlumnos();
-		});
-	}
+    // Metodo que buscar el alumno por dni
+    self.buscarAlumnoYInscripcion = function () {
+        var aluEncontrado = [];
+        var insEncontada = [];
+        ApiService.buscarInscripcionPorId(self.idInsc).then(function(response){
+            insEncontada = response.data.inscripcion;
+            ApiService.buscarAlumnoPorDni(insEncontada.dni).then(function(response){
+                aluEncontrado = response.data.alumnoDni[0];
+                //*Rellenar datos en el formulario*//
+                var fecInscripcion = insEncontada.fecinsc;
+                self.fecinsc = uibDateParser.parse(fecInscripcion, "dd/MM/yyyy");
+                self.estadoc = insEncontada.estadoc;
+                self.cursoSeleccionado = $filter('filter')(self.cursos, { nombre: insEncontada.curso })[0];;
+                var nac = $filter('filter')(self.regiones, { gentilicio: aluEncontrado.nacionalidad })[0]; 
+                var sex = $filter('filter')(self.sexos, { nombre: aluEncontrado.sexo })[0];
+                var prov = $filter('filter')(self.provincias, { nombre: aluEncontrado.provincia })[0];
+                var fec = aluEncontrado.fecnac;
+                var fecha = uibDateParser.parse(fec, "dd/MM/yyyy");
+                self.id = aluEncontrado._id;
+                self.dni = aluEncontrado.dni;
+                self.nombre = aluEncontrado.nombre;
+                self.apellido = aluEncontrado.apellido;
+                self.nacionalidad = nac;
+                self.fecnac = fecha;
+                self.sexo = sex;
+                self.fijo = aluEncontrado.fijo;
+                self.celular = aluEncontrado.celular;
+                self.email = aluEncontrado.email;
+                self.provincia = prov;
+                self.localidad = aluEncontrado.localidad;
+                self.domicilio = aluEncontrado.domicilio;
+                self.barrio = aluEncontrado.barrio;
+                self.ocupacion = aluEncontrado.ocupacion;
+            });
+        });
+    }
 
 	self.datosDelAlumno = function(){
 		var fec = Date.parse(self.fecnac).toString('dd/MM/yyyy');
@@ -106,30 +94,12 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 	        alumno.ocupacion = self.ocupacion;
 	        return alumno;
 	}
-
-	// Meotod que guarda los datos de alumnos
-    self.guardarAlumno = function () {
-		var alumno = self.datosDelAlumno();
-        ApiService.guardarAlumno(alumno).then(function (response) {
-        	self.guardarInscripcion();
-        }, function (error) {
-            alerta("__error_al_guardar");
-        });
-    }
-
+	
     // Meotod que guarda los datos de alumnos
     self.editarAlumno = function () {
    		var alumno = self.datosDelAlumno();
        	ApiService.editarAlumno(alumno, self.id).then(function (response) {
-			ApiService.buscarInscripcionPorDniYCurso(self.dni, self.cursoSeleccionado.nombre).then(function(response){
-				//$log.warn("Duplicado: " + JSON.stringify(response.data.resultadoInscripcion.length));
-		    	if(response.data.inscripcionesDniCurso.length > 0){
-		    		alerta("__advertencia_ya_inscripto");
-		    		self.resetInputs();
-		    	}else{
-		    		self.guardarInscripcion();
-		    	}
-			});
+			self.guardarInscripcion();
         }, function (error) {
         	$log.error(error)
             alerta("__error_al_guardar");
@@ -150,51 +120,14 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 					if(angular.isUndefined(self.sexo)){
 						alerta("__sexo_vacio");
 					}else{
-						self.enviandoInscripcion();
-						if(self.alumnoExistente){
-    						self.editarAlumno();
-    					}else{
-    						self.guardarAlumno();
-    					}
+						self.editando();
+						self.editarAlumno();
 					}
 				}
 			}
     	}
     }
-
     		
-    // Metodo para encontrar alumnos por DNI
-    self.encontrarAlumno = function(){
-    	if(!angular.isUndefined(self.dni)){
-    		var alumno = $filter('filter')(self.alumnos, { dni: self.dni })[0];
-    		if(!angular.isUndefined(alumno)){
-    			self.alumnoExistente = true;
-	    		var nac = $filter('filter')(self.regiones, { gentilicio: alumno.nacionalidad })[0]; 
-	    		var sex = $filter('filter')(self.sexos, { nombre: alumno.sexo })[0];
-	    		var prov = $filter('filter')(self.provincias, { nombre: alumno.provincia })[0];
-	    		var fec = alumno.fecnac;
-	    		var fecha = uibDateParser.parse(fec, "dd/MM/yyyy");
-	    		self.id = alumno._id;
-	    		self.dni = alumno.dni;
-		        self.nombre = alumno.nombre;
-		        self.apellido = alumno.apellido;
-		        self.nacionalidad = nac;
-		        self.fecnac = fecha;
-		        self.sexo = sex;
-		        self.fijo = alumno.fijo;
-		        self.celular = alumno.celular;
-		        self.email = alumno.email;
-		        self.provincia = prov;
-		        self.localidad = alumno.localidad;
-                self.domicilio = alumno.domicilio;
-                self.barrio = alumno.barrio;
-		        self.ocupacion = alumno.ocupacion;
-    		}
-    	}
-    	
-    }
-
-
     // Metodo que llama al endpoint para guardar la inscripcion
     self.guardarInscripcion = function (){
     	var insc = new inscripcionJsonBody();
@@ -203,9 +136,9 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
     	insc.fecinsc = Date.parse(self.fecinsc).toString('dd/MM/yyyy');
     	insc.curso = self.cursoSeleccionado.nombre;
         insc.estadoc = self.estadoc;
-        ApiService.guardarInscripcion(insc).then(function (response) {
+        ApiService.editarInscripcion(self.idInsc, insc).then(function (response) {
             alerta("__exito_al_guardar");
-            self.resetInputs();
+            $timeout(function () { self.irInscripciones(); }, 1000);
         }, function (error) {
         	$log.info(error);
             alerta("__error_al_guardar");
@@ -244,20 +177,25 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         }
     }
 
+    //Metodo para redirigir la pagina a inscripciones
+    self.irInscripciones = function () {
+        $state.go('inscripciones');
+    }
+
     // Metodo para manejar los estilos del boton cuando esta enviando la inscripcion
-    self.enviandoInscripcion = function(){
+    self.editando = function(){
     	self.colorButton = "btn btn-default btn-lg";
-    	self.labelButton = "Enviando Inscripción";
+    	self.labelButton = "Guardando Inscripción";
     	self.typeButton = "button";
     	self.iconButton = "fa fa-spinner fa-pulse fa-lg fa-fw";
     }
 
     // Metodo para manejar los estilos del boton de enviar inscripcion
-    self.envianInscripcion = function(){
+    self.esperandoEditar = function(){
     	self.colorButton = "btn btn-success btn-lg";
-    	self.labelButton = "Enviar Inscripción";
+    	self.labelButton = "Guardar Inscripción";
     	self.typeButton = "submit";
-    	self.iconButton = "glyphicon glyphicon-send";
+    	self.iconButton = "glyphicon glyphicon-floppy-saved";
     }
 
     // Metodo para traer la fecha local del sistema
@@ -315,22 +253,21 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 
     self.today = function() {
     	self.fecnac = new Date(1980, 1, 1);
-        self.fecinsc = new Date();
   	};
 
   	self.today();
 
     self.open1 = function() {
-        self.popup1.opened = true;
-    };
+    	self.popup1.opened = true;
+  	};
 
     self.open2 = function() {
         self.popup2.opened = true;
     };
 
     self.popup1 = {
-        opened: false
-    };
+    	opened: false
+  	};
 
      self.popup2 = {
         opened: false
@@ -346,9 +283,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
   	self.altInputFormats = ['M!/d!/yyyy'];
 
   	// Hago la llamada a todos los servicios que traer datos
-	self.resetInputs();
+    self.esperandoEditar();
 	self.listaCursos();
 	self.obtenerPronvincias();
 	self.obtenerRegiones();
-	
 }

@@ -5,8 +5,9 @@
         </div>
 
          <div class="btn-group pull-right">
+            <div excel-export export-data="cursoCtrl.exportData" file-name="{{cursoCtrl.fileName}}"></div>
             <button id="curso" class="btn btn-success btn-lg" type="button" ng-click="cursoCtrl.mostrarAgregarCursoModal()">
-               <strong style="font-size: 14px;"> <i class="glyphicon glyphicon-plus-sign"></i> Agregar Curso</strong>
+               <strong style="font-size: 14px;"> <i class="glyphicon glyphicon-plus-sign"></i> Agregar Nuevo Curso</strong>
             </button>
         </div>
     </div>
@@ -37,12 +38,14 @@
             <tr ng-repeat="curso in cursoCtrl.cursos | searchFor:cursoNombre">
                 <td>{{curso.nombre}}</td>
                 <td class="text-center">
-                    <a ng-click="cursoCtrl.mostrarAgregarCursoModal(curso._id, curso.nombre)" class="btn btn-xs btn-warning"> 
-                        <i class="fa fa-pencil"></i> Editar
-                    </a>
-                    <a ng-click="cursoCtrl.borrarOnClick($index, curso._id)" class="btn btn-xs btn-danger"> 
-                        <i class="fa fa-trash"></i> Borrar 
-                    </a>
+                    <div class="btn-group">
+                        <a ng-click="cursoCtrl.mostrarAgregarCursoModal(curso._id, curso.nombre)" class="btn btn-sm btn-warning"> 
+                            <i class="fa fa-pencil"></i> Editar
+                        </a>
+                        <a ng-click="cursoCtrl.borrarOnClick($index, curso._id)" class="btn btn-sm btn-danger"> 
+                            <i class="fa fa-trash"></i> Borrar 
+                        </a>
+                    </div>
                 </td>
             </tr>
         </tbody>

@@ -10,8 +10,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="NavController as navCtrl">
       <ul class="nav navbar-nav">
-        <li ui-sref-active="active"><a href ui-sref="home">Inscripciones</a></li>
-        <li ng-if="navCtrl.user" ui-sref-active="active"><a href ui-sref="asistencia">Asistencia</a></li>
+        <li ui-sref-active="active"><a href ui-sref="home">Inicio</a></li>
+        <li ng-if="navCtrl.user" ui-sref-active="active"><a href ui-sref="inscripciones">Inscripciones</a></li>
+        <li ng-if="navCtrl.user" ui-sref-active="active"><a href ui-sref="asistencias">Asistencias</a></li>
         <li ng-if="navCtrl.user" ui-sref-active="active"><a href ui-sref="alumnos">Alumnos</a></li>
         <li ng-if="navCtrl.user" ui-sref-active="active"><a href ui-sref="cursos">Cursos</a></li>
       </ul>
