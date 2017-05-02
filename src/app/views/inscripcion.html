@@ -51,7 +51,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="ins in insCtrl.inscripciones | searchFor:dniAlumno">
+            <tr ng-repeat="ins in insCtrl.inscripciones | searchForDni:dniAlumno">
                 <td>{{ins.dni}}</td>
                 <td>{{ins.alumno}}</td>
                 <td>{{ins.curso}}</td>

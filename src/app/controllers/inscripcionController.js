@@ -83,7 +83,7 @@ function InscripcionController(ApiService, $log, $uibModal, $timeout, $state){
                 if(result){
                     ApiService.borraInscripcion(id)
                     .then(function (response) {
-                        self.inscripciones.splice(index, 1);
+                        self.listaInscripciones();
                         alerta("__exito_al_borrar");
                     }, function (error) {
                         alerta("__error_al_borrar");
@@ -127,15 +127,15 @@ function InscripcionController(ApiService, $log, $uibModal, $timeout, $state){
 }
 
 /* Filter to dni del alumno */
-angular.module('app').filter('searchFor', function () {
+angular.module('app').filter('searchForDni', function () {
     return function (arr, dniAlumno) {
         if (!dniAlumno) {
             return arr;
         }
         var result = [];
-        dniAlumno = dniAlumno.toLowerCase();
+        dniAlumno = dniAlumno;
         angular.forEach(arr, function (item) {
-            if (item.dni.toLowerCase().indexOf(dniAlumno) !== -1) {
+            if (item.dni.indexOf(dniAlumno) !== -1) {
                 result.push(item);
             }
         });
