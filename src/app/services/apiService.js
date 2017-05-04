@@ -19,7 +19,9 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     borraInscripcion: borraInscripcion,
     buscarInscripcionesPorCurso: buscarInscripcionesPorCurso,
     guardarAsistencia: guardarAsistencia,
-    buscarAsistenciaPorDniYCurso: buscarAsistenciaPorDniYCurso
+    buscarAsistenciaPorDniYCurso: buscarAsistenciaPorDniYCurso,
+    buscarAsistenciaCursoYFecha: buscarAsistenciaCursoYFecha,
+    editarAsistencia: editarAsistencia
   };
 
   return service;
@@ -41,9 +43,22 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
       });
     }
 
+    // Metodo para editar la asistencia
+    function editarAsistencia(id, body) {
+      var uri = __env.apiUrl + 'asistencia/editar/' + id;
+      return $http({
+          url: uri,
+          method: "PATCH",
+          data: body,
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
     // Metodo para buscar asitencia de un alumno
     function buscarAsistenciaPorDniYCurso(dni, curso, fecha) {
-      var uri = __env.apiUrl + 'asistencia/buscar/'+dni+'/'+curso+'/'+encodeURIComponent(fecha);
+      var uri = __env.apiUrl + 'asistencia/buscar/dni/'+dni+'/curso/'+curso+'/fecha/'+encodeURIComponent(fecha);
       return $http({
           url: uri,
           method: "GET",
@@ -52,6 +67,19 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
           return response;
       });
     }
+
+    // Metodo para buscar asitencia por curso y fecha
+    function buscarAsistenciaCursoYFecha(curso, fecha) {
+      var uri = __env.apiUrl + 'asistencia/buscar/curso/'+curso+'/fecha/'+encodeURIComponent(fecha);
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
     //*************************//
     //*Operaciones de Alumnos *//
     //*************************//
