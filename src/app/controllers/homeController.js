@@ -27,11 +27,7 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
         self.listaAlumnos();
 	}
 
-	self.sexos = 
-            [
-                { nombre: "Masculino" },
-                { nombre: "Femenino" }
-            ];
+	self.sexos = [ { nombre: "Masculino" }, { nombre: "Femenino" } ];
 	
 	// Metodo que genera la lista de alumnos
 	self.listaAlumnos = function () {

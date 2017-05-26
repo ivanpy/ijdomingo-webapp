@@ -5,6 +5,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     guardarAlumno: guardarAlumno,
     editarAlumno: editarAlumno,
     buscarAlumnoPorDni: buscarAlumnoPorDni,
+    borrarAlumno: borrarAlumno,
     obtenerCursos: obtenerCursos,
     guardarCurso: guardarCurso,
     editarCurso: editarCurso,
@@ -21,7 +22,12 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     guardarAsistencia: guardarAsistencia,
     buscarAsistenciaPorDniYCurso: buscarAsistenciaPorDniYCurso,
     buscarAsistenciaCursoYFecha: buscarAsistenciaCursoYFecha,
-    editarAsistencia: editarAsistencia
+    editarAsistencia: editarAsistencia,
+    obtenerDocentes: obtenerDocentes,
+    guardarDocente: guardarDocente,
+    editarDocente: editarDocente,
+    borrarDocente: borrarDocente,
+    buscarDocentePorDni: buscarDocentePorDni
   };
 
   return service;
@@ -125,6 +131,84 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
      // Metodo para traer todos los alumnos 
     function buscarAlumnoPorDni(dni) {
       var uri = __env.apiUrl + 'alumno/buscar/dni/' + dni;
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para borrar alumno
+    function borrarAlumno(id) {
+      var uri = __env.apiUrl + 'alumno/borrar/' + id;
+      return $http({
+          url: uri,
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+    //*************************//
+    //*Operaciones de Docentes *//
+    //*************************//
+
+    // Metodo para traer todos los docentes 
+    function obtenerDocentes() {
+      var uri = __env.apiUrl + 'docentes';
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+    // Metodo para guardar docente
+    function guardarDocente(body) {
+      var uri = __env.apiUrl + 'docente/agregar';
+      return $http({
+          url: uri,
+          method: "POST",
+          data: body,
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para editar docente
+    function editarDocente(body, id) {
+      var uri = __env.apiUrl + 'docente/editar/' + id;
+      return $http({
+          url: uri,
+          method: "PUT",
+          data: body,
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para borrar docente
+    function borrarDocente(id) {
+      var uri = __env.apiUrl + 'docente/borrar/' + id;
+      return $http({
+          url: uri,
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+     // Metodo para buscar un docente por dni
+    function buscarDocentePorDni(dni) {
+      var uri = __env.apiUrl + 'docentes/buscar/dni/' + dni;
       return $http({
           url: uri,
           method: "GET",
