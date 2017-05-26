@@ -54,8 +54,14 @@
     .state('alumnos', {
         url: "/alumnos",
         templateUrl: "app/views/alumno.html",
-        controller: "HomeController",
-        controllerAs: "homeCtrl"
+        controller: "AlumnoController",
+        controllerAs: "alumnoCtrl"
+      })
+     .state('docentes', {
+        url: "/docentes",
+        templateUrl: "app/views/docentes.html",
+        controller: "DocenteController",
+        controllerAs: "docCtrl"
       })
     .state('cursos', {
         url: "/cursos",

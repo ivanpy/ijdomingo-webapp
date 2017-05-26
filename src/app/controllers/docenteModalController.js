@@ -1,6 +1,6 @@
-angular.module('app').controller('AlumnoModalController', AlumnoModalController);
+angular.module('app').controller('DocenteModalController', DocenteModalController);
 
-function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEdit, uibDateParser, $filter, $log) {
+function DocenteModalController(ApiService, $uibModalInstance, $timeout, docenteEdit, uibDateParser, $filter, $log) {
 
     var self = this;
     self.mostarMensaje = false;
@@ -8,25 +8,25 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
     self.sexos = [ { nombre: "Masculino" }, { nombre: "Femenino" } ];
 
     self.init = function (){
-        self.guardarAlumnoBtn();
+        self.guardarDocenteBtn();
         self.stateEdition = '';
-        if(!angular.isUndefined(alumnoEdit)){
-            self.titulo = "Editar Alumno";
-            self.id = alumnoEdit._id;
-            self.dni = alumnoEdit.dni;
-            self.nombre = alumnoEdit.nombre;
-            self.apellido = alumnoEdit.apellido;
-            self.fecnac = uibDateParser.parse(alumnoEdit.fecnac, "dd/MM/yyyy");
-            self.fijo = alumnoEdit.fijo;
-            self.celular = alumnoEdit.celular;
-            self.email = alumnoEdit.email;
-            self.localidad = alumnoEdit.localidad;
-            self.domicilio = alumnoEdit.domicilio;
-            self.barrio = alumnoEdit.barrio;
-            self.ocupacion = alumnoEdit.ocupacion;
-            self.sexo = $filter('filter')(self.sexos, { nombre: alumnoEdit.sexo })[0];
+        if(!angular.isUndefined(docenteEdit)){
+            self.titulo = "Editar Docente";
+            self.id = docenteEdit._id;
+            self.dni = docenteEdit.dni;
+            self.nombre = docenteEdit.nombre;
+            self.apellido = docenteEdit.apellido;
+            self.fecnac = uibDateParser.parse(docenteEdit.fecnac, "dd/MM/yyyy");
+            self.fijo = docenteEdit.fijo;
+            self.celular = docenteEdit.celular;
+            self.email = docenteEdit.email;
+            self.localidad = docenteEdit.localidad;
+            self.domicilio = docenteEdit.domicilio;
+            self.barrio = docenteEdit.barrio;
+            self.ocupacion = docenteEdit.ocupacion;
+            self.sexo = $filter('filter')(self.sexos, { nombre: docenteEdit.sexo })[0];
         }else{
-            self.titulo = "Agregar Nuevo Alumno";
+            self.titulo = "Agregar Nuevo Docente";
             self.nacionalidad = undefined;
             self.provincia = undefined;
             self.sexo = undefined;
@@ -75,8 +75,7 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         self.provincias = [];
         ApiService.obtenerPronvincias().then(function(response){
             self.provincias = response.data;
-            self.provincia = angular.isUndefined(alumnoEdit) ? undefined : $filter('filter')(self.provincias, { nombre: alumnoEdit.provincia })[0]; 
-            $log.info("Prov Selected:"+ JSON.stringify(self.provincia));
+            self.provincia = angular.isUndefined(docenteEdit) ? undefined : $filter('filter')(self.provincias, { nombre: docenteEdit.provincia })[0]; 
         });
     }
 
@@ -85,33 +84,32 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         self.regiones = [];
         ApiService.obtenerRegiones().then(function(response){
             self.regiones = response.data;
-            self.nacionalidad = angular.isUndefined(alumnoEdit) ? undefined : $filter('filter')(self.regiones, { gentilicio: alumnoEdit.nacionalidad })[0]; 
-            $log.info("Nac Selected:"+ JSON.stringify(self.nacionalidad));
+            self.nacionalidad = angular.isUndefined(docenteEdit) ? undefined : $filter('filter')(self.regiones, { gentilicio: docenteEdit.nacionalidad })[0]; 
         });
     }
 
     // Metodo para capturar todo los valores de los campos del formulario en un objeto json
-    self.datosDelAlumno = function(){
+    self.datosDelDocente = function(){
         var fec = Date.parse(self.fecnac).toString('dd/MM/yyyy');
-        var alumno = new alumnoJsonBody();
-            alumno.dni = self.dni;
-            alumno.nombre = self.nombre;
-            alumno.apellido = self.apellido;
-            alumno.nacionalidad = self.nacionalidad.gentilicio;
-            alumno.fecnac = fec;
-            alumno.sexo = self.sexo.nombre;
-            alumno.fijo = self.fijo;
-            alumno.celular = self.celular;
-            alumno.email = self.email;
-            alumno.provincia = self.provincia.nombre;
-            alumno.localidad = self.localidad;
-            alumno.domicilio = self.domicilio;
-            alumno.barrio = self.barrio;
-            alumno.ocupacion = self.ocupacion;
-            return alumno;
+        var docente = new docenteJsonBody();
+            docente.dni = self.dni;
+            docente.nombre = self.nombre;
+            docente.apellido = self.apellido;
+            docente.nacionalidad = self.nacionalidad.gentilicio;
+            docente.fecnac = fec;
+            docente.sexo = self.sexo.nombre;
+            docente.fijo = self.fijo;
+            docente.celular = self.celular;
+            docente.email = self.email;
+            docente.provincia = self.provincia.nombre;
+            docente.localidad = self.localidad;
+            docente.domicilio = self.domicilio;
+            docente.barrio = self.barrio;
+            docente.ocupacion = self.ocupacion;
+            return docente;
     }
 
-    // Evento click del boton guardar alumno
+    // Evento click del boton guardar docente
     self.onClickGuardar = function (){
         if(angular.isUndefined(self.fecnac) || self.fecnac == ""){
             alerta("__facnac_vacio");
@@ -125,10 +123,10 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
                     if(angular.isUndefined(self.sexo)){
                         alerta("__sexo_vacio");
                     }else{
-                        if(self.titulo == 'Agregar Nuevo Alumno'){
-                            self.guardarAlumno();
+                        if(self.titulo == 'Agregar Nuevo Docente'){
+                            self.guardarDocente();
                         }else{
-                            self.editarAlumno();
+                            self.editarDocente();
                         }
                     }
                 }
@@ -137,11 +135,11 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         
     }
 
-    // Meotod que guarda los datos de alumnos
-    self.guardarAlumno = function () {
-        self.guardandoAlumnoBtn();
-        var alumno = self.datosDelAlumno();
-        ApiService.guardarAlumno(alumno).then(function (response) {
+    // Meotod que guarda los datos de docentes
+    self.guardarDocente = function () {
+        self.guardandoDocenteBtn();
+        var docente = self.datosDelDocente();
+        ApiService.guardarDocente(docente).then(function (response) {
             self.toggl = true;    
             alerta("__exito_al_guardar");
             self.init();
@@ -151,10 +149,10 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         });
     }
 
-    // Metodo para editar los datos del alumno
-    self.editarAlumno = function () {
-        var alumno = self.datosDelAlumno();
-        ApiService.editarAlumno(alumno, self.id)
+    // Metodo para editar los datos del docente
+    self.editarDocente = function () {
+        var docente = self.datosDelDocente();
+        ApiService.editarDocente(docente, self.id)
            .then(function (response) {
                 self.toggl = true; 
                 self.stateEdition = 'editado';
@@ -173,8 +171,8 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         //$uibModalInstance.dismiss('cancel');
     }
 
-   // Contrato para guardar alumnos
-    var alumnoJsonBody = function () {
+   // Contrato para guardar docentes
+    var docenteJsonBody = function () {
         return {
             "nombre" : "",
             "apellido" : "",
@@ -194,7 +192,7 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
     }
 
     // Metodo para manejar los estilos del boton
-    self.guardandoAlumnoBtn = function(){
+    self.guardandoDocenteBtn = function(){
         self.colorButton = "btn btn-default pull-right";
         self.labelButton = "Guardando..";
         self.typeButton = "button";
@@ -202,9 +200,9 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
     }
 
     // Metodo para manejar los estilos del boton 
-    self.guardarAlumnoBtn = function(){
+    self.guardarDocenteBtn = function(){
         self.colorButton = "btn btn-primary pull-right";
-        self.labelButton = "Guardar Alumno";
+        self.labelButton = "Guardar docente";
         self.typeButton = "submit";
         self.iconButton = "glyphicon glyphicon-floppy-disk";
     }
@@ -214,12 +212,12 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         self.mostarMensaje = true;
         switch (validation) {
             case "__error_al_guardar":
-                self.alertMsg = "Error al guardar los datos del alumno";
+                self.alertMsg = "Error al guardar los datos del docente";
                 self.alert = 'alert alert-danger alert-dismissible';
                 self.alertType = 'Error';
                 break;
             case "__exito_al_guardar":
-                self.alertMsg = "Los datos del alumno se guardaron exitosamente";
+                self.alertMsg = "Los datos del docente se guardaron exitosamente";
                 self.alert = 'alert alert-success alert-dismissible';
                 self.alertType = 'Exito';
                 break;

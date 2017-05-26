@@ -45,7 +45,8 @@ p {
 }
 
 .calendar-btn {
-	font-size: 20px;
+	padding: 2px;
+	font-size: 15px;
 }
 
 .navbar-av {

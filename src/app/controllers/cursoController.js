@@ -112,6 +112,10 @@ function CursoController(ApiService, $log, $uibModal, $timeout){
         $timeout(function () {  self.mostarMensaje = false; }, 5000);
     }
 
+    self.dismissAlert = function() {
+        self.mostarMensaje = false;
+    };
+    
   	// Hago la llamada a todos los servicios que traer datos
 	self.listaCursos();
 }
