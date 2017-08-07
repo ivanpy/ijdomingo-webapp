@@ -49,6 +49,11 @@ p {
 	font-size: 15px;
 }
 
+.asi-calendar-btn {
+	padding: 2px;
+	font-size: 16px;
+}
+
 .navbar-av {
 	margin-top: 50px;
     background: #f5f5f5;
