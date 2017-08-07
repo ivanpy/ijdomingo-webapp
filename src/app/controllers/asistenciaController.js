@@ -1,13 +1,14 @@
 angular.module('app').controller('AsistenciaController', AsistenciaController);
     
-function AsistenciaController(ApiService, $log, $uibModal, $timeout){
+function AsistenciaController(ApiService, $log, $uibModal, $timeout, uibDateParser){
   
 	var self = this;
   	self.mostarMensaje = false;
     self.alumnoAsitencia = undefined;
     self.cursoSeleccionado = undefined;
 	self.dniAlumno = "";
-	// Metodo que genera la lista de inscripciones
+    
+    // Metodo que genera la lista de inscripciones
 	self.obtenerInscripciones = function () {
 		self.inscripciones = [];
 		ApiService.buscarInscripciones().then(function(response){
@@ -35,6 +36,29 @@ function AsistenciaController(ApiService, $log, $uibModal, $timeout){
             self.exportData.push([value.dni, value.alumno, value.curso, value.fecha, value.asistencia ? "PRESENTE" : "AUSENTE"]);
         });
     }
+
+    self.today = function() {
+        self.fecasis = new Date();
+    };
+
+    self.open = function() {
+        self.popup.opened = true;
+    };
+
+    self.popup = {
+        opened: false
+    };
+
+    self.dateOptions = {
+        formatYear: 'yyyy',
+        maxDate: new Date(),
+        minDate: new Date(2016, 1, 1),
+        startingDay: 1
+    };
+
+    self.altInputFormats = ['M!/d!/yyyy'];
+
+    self.today();
 
     // Metodo que guarda la asistencia
     self.guardarListaDeAsistencia = function (nuevaLista){
@@ -145,7 +169,7 @@ function AsistenciaController(ApiService, $log, $uibModal, $timeout){
     self.generarNuevaLista = function () {
         var nuevaLista = [];
         var inscripcionCurso = [];
-        var fechaHoy = fechaActual();
+        var fechaHoy = fechaCalendario();
         ApiService.buscarInscripcionesPorCurso(self.cursoSeleccionado.nombre).then(function(response){
             if(response.data.inscripcionesCurso.length > 0){
                 self.generandoListaAsistenciaEstiloBoton();
@@ -168,7 +192,7 @@ function AsistenciaController(ApiService, $log, $uibModal, $timeout){
     self.obtieneListaAsistencia = function () {
         self.listaAsistencia = [];
         var listaResultado = [];
-        var fechaHoy = fechaActual();
+        var fechaHoy = fechaCalendario();
         ApiService.buscarAsistenciaCursoYFecha(self.cursoSeleccionado.nombre, fechaHoy).then(function(response){
             if(response.data.asistenciaCursoFecha.length > 0){
                 listaResultado = response.data.asistenciaCursoFecha;
@@ -189,7 +213,7 @@ function AsistenciaController(ApiService, $log, $uibModal, $timeout){
     // Muestra una lista existente y si no existe la crea
     self.verListaAsistencia = function () {
         if(!angular.isUndefined(self.cursoSeleccionado)){
-            var fechaHoy = fechaActual();
+            var fechaHoy = fechaCalendario();
             ApiService.buscarAsistenciaCursoYFecha(self.cursoSeleccionado.nombre, fechaHoy)
             .then(function (response) {
                 if(response.data.asistenciaCursoFecha.length > 0){
@@ -228,6 +252,14 @@ function AsistenciaController(ApiService, $log, $uibModal, $timeout){
     var fechaActual = function() {
         var fec = Date.parse(new Date()).toString('dd/MM/yyyy');
         return fec;
+    };
+
+     // Metodo para traer la fecha seleccionada en el calendario
+    var fechaCalendario = function() {
+        if(self.fecasis == "" || angular.isUndefined(self.fecasis)){
+            self.today();    
+        }
+        return Date.parse(self.fecasis).toString('dd/MM/yyyy');
     };
 
     // Metodo para manejar los estilos del boton cuando esta enviando la inscripcion
