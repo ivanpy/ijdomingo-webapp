@@ -93,10 +93,10 @@ function NotaController(ApiService, $log, $uibModal, $timeout, $state){
     }
 
     // Metodo para mostrar modal del confirmacion para borrar un curso
-    self.borrarOnClick = function(index, id) {
+    self.borrarOnClick = function(index, nota) {
         bootbox.confirm({
-            title: "Borrar Curso",
-            message: "¿Estas seguro que desea borrar esta nota?",
+            title: "Borrar Nota",
+            message: "¿Estas seguro que desea borrar la nota de "+ nota.alumno +"?",
             buttons: {
                 cancel: {
                     label: '<i class="fa fa-times"></i> No'
@@ -107,7 +107,7 @@ function NotaController(ApiService, $log, $uibModal, $timeout, $state){
             },
             callback: function (result) {
                 if(result){
-                    ApiService.borrarNota(id)
+                    ApiService.borrarNota(nota._id)
                     .then(function (response) {
                         self.listaNotas();
                         alerta("__exito_al_borrar");
