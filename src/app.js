@@ -75,6 +75,12 @@
         controller: "AsistenciaController",
         controllerAs: "asiCtrl"
       })
+     .state('notas', {
+        url: "/notas",
+        templateUrl: "app/views/notas.html",
+        controller: "NotaController",
+        controllerAs: "notaCtrl"
+      })
   });
 
 })(angular)
