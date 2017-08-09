@@ -31,7 +31,7 @@ Seleccione un curso con alumnos inscriptos.</small>
         <ui-select-match placeholder=" -- Busca y selecciona un alumno --">
             DNI: {{ $select.selected.dni }} | NOMBRE: {{ $select.selected.alumno }}
         </ui-select-match>
-        <ui-select-choices repeat="aluins in notaModalCtrl.inscripciones | filter: $select.search track by aluins.alumno">
+        <ui-select-choices repeat="aluins in notaModalCtrl.inscripciones | filter: $select.search track by $index">
             <div ng-bind-html="aluins.alumno | highlight: $select.search"></div>
             <small>
                 DNI: <span ng-bind-html="''+aluins.dni | highlight: $select.search"></span>
