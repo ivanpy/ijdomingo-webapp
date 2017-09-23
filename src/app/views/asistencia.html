@@ -37,7 +37,7 @@
     <div class="form-group">
             <a href class="pull-right" ng-click="asiCtrl.limpiar()"><small>Limpiar<small></a>
             <h4><strong>Seleccione un curso para ver la lista de asistencia*</strong></h4>
-            <ui-select ng-model="asiCtrl.cursoSeleccionado" theme="selectize" on-select="asiCtrl.filterPorCurso($select.selected.nombre)">
+            <ui-select ng-model="asiCtrl.cursoSeleccionado" theme="selectize">
             <ui-select-match placeholder=" -- Busca y selecciona un curso --" required>
                 {{$select.selected.nombre}}
             </ui-select-match>
