@@ -15,7 +15,7 @@
    * Define Angular application
    *************************************************************************/
   
-  var ngModule = angular.module('app', ['ui.bootstrap', 'ui.router', 'ngSanitize', 'ui.select']);
+  var ngModule = angular.module('app', ['ui.bootstrap', 'ui.router', 'ngSanitize', 'ui.select', 'ngStorage']);
 
     /**************************************************************************
    * Make environment available in Angular
@@ -30,6 +30,14 @@
 
   ngModule.config(function ($stateProvider, $urlRouterProvider) {
 
+    function periodoResolve($localStorage, ApiService) {
+        return ApiService.periodoActivo()
+           .then(function (response) {
+               $localStorage.periodo = response.data.periodo;
+               return $localStorage.periodo;
+           });
+    };
+
     $urlRouterProvider.otherwise("/");
 
     $stateProvider
@@ -37,13 +45,15 @@
         url: "/",
         templateUrl: "app/views/home.html",
         controller: "HomeController",
-        controllerAs: "homeCtrl"
+        controllerAs: "homeCtrl",
+        resolve: { perActivo: periodoResolve }
       })
       .state('inscripciones', {
         url: "/inscripciones",
         templateUrl: "app/views/inscripcion.html",
         controller: "InscripcionController",
-        controllerAs: "insCtrl"
+        controllerAs: "insCtrl",
+        resolve: { perActivo: periodoResolve }
       })
       .state('editar', {
         url: "/editar/:id",
@@ -73,13 +83,15 @@
         url: "/asistencias",
         templateUrl: "app/views/asistencia.html",
         controller: "AsistenciaController",
-        controllerAs: "asiCtrl"
+        controllerAs: "asiCtrl",
+        resolve: { perActivo: periodoResolve }
       })
      .state('notas', {
         url: "/notas",
         templateUrl: "app/views/notas.html",
         controller: "NotaController",
-        controllerAs: "notaCtrl"
+        controllerAs: "notaCtrl",
+        resolve: { perActivo: periodoResolve }
       })
   });
 

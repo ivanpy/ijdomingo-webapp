@@ -26,7 +26,7 @@
     <div class="form-group">
             <a href class="pull-right" ng-click="insCtrl.restarFiltro()"><small>Limpiar filtro<small></a>
             <h5><strong>Filtrar por Curso</strong></h5>
-            <ui-select ng-model="insCtrl.cursoSeleccionado" theme="selectize" on-select="insCtrl.filterPorCurso($select.selected.nombre)">
+            <ui-select ng-model="insCtrl.cursoSeleccionado" theme="selectize" on-select="insCtrl.filterPorCurso($select.selected)">
             <ui-select-match placeholder=" -- Busca y selecciona un curso como filtro --" required>
                 {{$select.selected.nombre}}
             </ui-select-match>
@@ -52,9 +52,9 @@
         </thead>
         <tbody>
             <tr ng-repeat="ins in insCtrl.inscripciones | searchForDni:dniAlumno">
-                <td>{{ins.dni}}</td>
-                <td>{{ins.alumno}}</td>
-                <td>{{ins.curso}}</td>
+                <td>{{ins.alumno.dni}}</td>
+                <td>{{ins.alumno.nombre +" "+ ins.alumno.apellido}}</td>
+                <td>{{ins.curso.nombre}}</td>
                 <td>{{ins.fecinsc}}</td>
                 <td>{{ ins.estadoc ? "COMPLETA" : "INCOMPLETA" }}</td>
                 <td class="text-center">

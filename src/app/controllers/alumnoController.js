@@ -132,8 +132,6 @@ function AlumnoController(ApiService, $log, $uibModal, $timeout, $window, $filte
         });
     }
 
-    
-
 	// Metodo que muestra los mensajes de errores
     var alerta = function (validation) {
         self.mostarMensaje = true;

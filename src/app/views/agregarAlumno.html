@@ -36,17 +36,17 @@
                     <label for="nacionalidad">Nacionalidad*</label>
                     <ui-select ng-model="alumnoModalCtrl.nacionalidad" theme="selectize">
                     <ui-select-match placeholder=" -- Busca y selecciona la nacionalidad --">
-                        {{ $select.selected.gentilicio }}
+                        {{ $select.selected.nombre }}
                     </ui-select-match>
-                    <ui-select-choices group-by="'continente'" repeat="region in alumnoModalCtrl.regiones | filter: $select.search track by region.pais">
+                    <ui-select-choices repeat="region in alumnoModalCtrl.regiones | filter: $select.search track by region.pais">
                         <div ng-bind-html="region.pais | highlight: $select.search"></div>
-                        <small>Nacionalidad: {{ region.gentilicio }}</small>
+                        <small>Nacionalidad: {{ region.nombre }}</small>
                     </ui-select-choices>
                     </ui-select>
                 </div>
                 <div class="form-group">
                     <label for="provincia">Provincia*</label>
-                    <ui-select ng-model="alumnoModalCtrl.provincia" theme="selectize">
+                    <ui-select ng-model="alumnoModalCtrl.provincia" theme="selectize" on-select="alumnoModalCtrl.filtrarLocaliad($select.selected)">
                     <ui-select-match placeholder=" -- Busca y selecciona la provincia --">
                         {{ $select.selected.nombre }}
                     </ui-select-match>
@@ -96,7 +96,15 @@
                 </div>
                 <div class="form-group">
                     <label for="localidad">Localidad*</label>
-                    <input id="localidad" ng-model="alumnoModalCtrl.localidad" class="form-control" type="text" placeholder="Ingrese la localidad" required>
+                    <ui-select ng-model="alumnoModalCtrl.localidad" theme="selectize">
+                    <ui-select-match placeholder=" -- Busca y selecciona la localidad --">
+                        {{ $select.selected.nombre }}
+                    </ui-select-match>
+                    <ui-select-choices group-by="'provincia.nombre'" repeat="p in alumnoModalCtrl.localidades | filter: $select.search track by p.nombre">
+                        <div ng-bind-html="p.nombre | highlight: $select.search"></div>
+                        <small>Provincia: {{ p.provincia.nombre }}</small>
+                    </ui-select-choices>
+                    </ui-select>
                 </div>
                  <div class="form-group">
                     <label for="domicilio">Domicilio</label>

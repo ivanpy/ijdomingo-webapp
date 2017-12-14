@@ -1,4 +1,4 @@
-angular.module('app').factory('ApiService', function ApiService($http, __env) {
+angular.module('app').factory('ApiService', function ApiService($http, __env, $localStorage, $log) {
   
   var service = { 
     obtenerAlumnos: obtenerAlumnos,
@@ -14,7 +14,8 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     buscarInscripciones: buscarInscripciones,
     buscarInscripcionPorId: buscarInscripcionPorId,
     editarInscripcion: editarInscripcion,
-    obtenerPronvincias: obtenerPronvincias,
+    obtenerProvincias: obtenerProvincias,
+    obtenerNacionalidades: obtenerNacionalidades,
     obtenerRegiones: obtenerRegiones,
     buscarInscripcionPorDniYCurso: buscarInscripcionPorDniYCurso,
     borraInscripcion: borraInscripcion,
@@ -34,7 +35,10 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     obtenerNotas: obtenerNotas,
     buscarNotaPorDniYCurso: buscarNotaPorDniYCurso,
     buscarNotasPorCurso: buscarNotasPorCurso,
-    buscarNotaPorId: buscarNotaPorId
+    buscarNotaPorId: buscarNotaPorId,
+    periodoActivo: periodoActivo,
+    obtenerLocalidades: obtenerLocalidades,
+    obtenerLocalidadPorProvincia: obtenerLocalidadPorProvincia
   };
 
   return service;
@@ -43,8 +47,24 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     //*Operaciones de Notas *//
     //****************************//
     // Metodo para traer todos las notas 
+    function periodoActivo() {
+      var uri = __env.apiUrl + 'periodo/activo';
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          //$log.info(JSON.stringify(response.data.periodo._id) );
+          return response;
+      });
+    }
+
+    //****************************//
+    //*Operaciones de Notas *//
+    //****************************//
+    // Metodo para traer todos las notas 
     function obtenerNotas() {
-      var uri = __env.apiUrl + 'notas';
+      var uri = __env.apiUrl + 'notas/' + $localStorage.periodo._id + '?page=1&size=50&sort=desc';
       return $http({
           url: uri,
           method: "GET",
@@ -189,7 +209,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
 
     // Metodo para traer todos los alumnos 
     function obtenerAlumnos() {
-      var uri = __env.apiUrl + 'alumnos';
+      var uri = __env.apiUrl + 'alumnos?page=1&size=50&sort=desc';
       return $http({
           url: uri,
           method: "GET",
@@ -255,7 +275,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
 
     // Metodo para traer todos los docentes 
     function obtenerDocentes() {
-      var uri = __env.apiUrl + 'docentes';
+      var uri = __env.apiUrl + 'docentes?page=1&size=50&sort=desc';
       return $http({
           url: uri,
           method: "GET",
@@ -321,7 +341,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
 
     // Metodo para traer todos los cursos 
     function obtenerCursos() {
-      var uri = __env.apiUrl + 'cursos';
+      var uri = __env.apiUrl + 'cursos?page=1&size=50&sort=desc';
       return $http({
           url: uri,
           method: "GET",
@@ -401,7 +421,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
 
      // Metodo para buscar todas las inscripciones
     function buscarInscripciones() {
-      var uri = __env.apiUrl + 'inscripciones';
+      var uri = __env.apiUrl + 'inscripciones/'+ $localStorage.periodo._id +'?page=1&size=50&sort=desc';
       return $http({
           url: uri,
           method: "GET",
@@ -426,7 +446,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
 
      // Metodo para buscar las inscripciones por curso
     function buscarInscripcionesPorCurso(curso) {
-      var uri = __env.apiUrl + 'inscripcion/buscar/curso/' + encodeURIComponent(curso);
+      var uri = __env.apiUrl + 'inscripcion/buscar/curso/'+$localStorage.periodo._id+'?curso='+curso+'&page=1&size=50&sort=desc';
       return $http({
           url: uri,
           method: "GET",
@@ -465,7 +485,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
     //*****************************//
     
     // Datos de provincias
-    function obtenerPronvincias() {
+    /*function obtenerPronvincias() {
         var uri = "app/jsons/provincias.json";
         return $http({ 
           url: uri, 
@@ -473,7 +493,7 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
           headers: { "Content-Type": "application/json" }, 
           isArray: true 
         });
-    }
+    }*/
 
     // Datos de regiones
     function obtenerRegiones() {
@@ -485,4 +505,61 @@ angular.module('app').factory('ApiService', function ApiService($http, __env) {
           isArray: true 
         });
     }
+
+    //****************************//
+    //*Operaciones de Nocionalidades *//
+    //****************************//
+    
+    // Metodo para traer todos las nacionalidades
+    function obtenerNacionalidades() {
+      var uri = __env.apiUrl + 'nacionalidades?page=1&size=50&sort=asc';
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+    //****************************//
+    //*Operaciones de Nocionalidades *//
+    //****************************//
+    
+    // Metodo para traer todos las provincias
+    function obtenerProvincias() {
+      var uri = __env.apiUrl + 'provincias?page=1&size=50&sort=asc';
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+    
+    // Metodo para traer todos las localidades
+    function obtenerLocalidades() {
+      var uri = __env.apiUrl + 'localidades?page=1&size=50&sort=asc';
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+
+    // Metodo para traer todos las localidades
+    function obtenerLocalidadPorProvincia(provincia) {
+      var uri = __env.apiUrl + 'localidad/buscar/provincia/'+ provincia;
+      return $http({
+          url: uri,
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+      }).then(function (response) {
+          return response;
+      });
+    }
+    
 });

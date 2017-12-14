@@ -11,12 +11,12 @@ function InscripcionController(ApiService, $log, $uibModal, $timeout, $state){
 		self.inscripciones = [];
         if(angular.isUndefined(self.cursoSeleccionado)){
             ApiService.buscarInscripciones().then(function(response){
-                self.inscripciones = response.data.inscripcion;
+                self.inscripciones = response.data.inscripciones;
                 self.exportarEXcel();
             });
         }else{
             ApiService.buscarInscripcionesPorCurso(self.filerbyCurso).then(function(response){
-                self.inscripciones = response.data.inscripcionesCurso;
+                self.inscripciones = response.data.inscripciones;
                 self.exportarEXcel();
             });
         }
@@ -32,7 +32,7 @@ function InscripcionController(ApiService, $log, $uibModal, $timeout, $state){
     self.listaCursos = function () {
         self.cursos = [];
         ApiService.obtenerCursos().then(function(response){
-            self.cursos = response.data.curso;
+            self.cursos = response.data.cursos;
         });
     }
 
@@ -44,8 +44,8 @@ function InscripcionController(ApiService, $log, $uibModal, $timeout, $state){
 
     // Metodo que para filtrar por curso las inscripciones
     self.filterPorCurso = function (curso) {
-        self.filerbyCurso = curso;
-       self.listaInscripciones();
+        self.filerbyCurso = curso._id;
+        self.listaInscripciones();
     }
 
     // Metodo que prepara los datos para exportar a excel
@@ -135,7 +135,7 @@ angular.module('app').filter('searchForDni', function () {
         var result = [];
         dniAlumno = dniAlumno;
         angular.forEach(arr, function (item) {
-            if (item.dni.indexOf(dniAlumno) !== -1) {
+            if (item.alumno.dni.indexOf(dniAlumno) !== -1) {
                 result.push(item);
             }
         });

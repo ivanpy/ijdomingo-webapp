@@ -41,8 +41,8 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 	// Metodo que trae los datos de las provincias
 	self.obtenerPronvincias = function () {
 		self.provincias = [];
-		ApiService.obtenerPronvincias().then(function(response){
-	    	self.provincias = response.data;
+		ApiService.obtenerProvincias().then(function(response){
+	    	self.provincias = response.data.provincias;
 		});
 	}
 
@@ -58,7 +58,7 @@ function HomeController(ApiService, $log, $uibModal, $timeout, $window, $filter,
 	self.listaCursos = function () {
 		self.cursos = [];
 		ApiService.obtenerCursos().then(function(response){
-	    	self.cursos = response.data.curso;
+	    	self.cursos = response.data.cursos;
 	    	//$log.warn("Cursos: " + JSON.stringify(self.cursos));
 		});
 	}

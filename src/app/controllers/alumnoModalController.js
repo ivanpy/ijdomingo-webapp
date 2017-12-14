@@ -28,6 +28,7 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         }else{
             self.titulo = "Agregar Nuevo Alumno";
             self.nacionalidad = undefined;
+            self.localidad = undefined;
             self.provincia = undefined;
             self.sexo = undefined;
             self.dni = "";
@@ -37,7 +38,6 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
             self.fijo = "";
             self.celular = "";
             self.email = "";
-            self.localidad = "";
             self.domicilio = "";
             self.barrio = "";
             self.ocupacion = "";
@@ -70,11 +70,16 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
         self.popup.opened = true;
     };
 
+    // Metodo que para filtrar por curso las inscripciones
+    self.filtrarLocaliad = function (provincia) {
+        self.obtenerLocalidades();
+    }
+
     // Metodo que trae los datos de las provincias
     self.obtenerPronvincias = function () {
         self.provincias = [];
-        ApiService.obtenerPronvincias().then(function(response){
-            self.provincias = response.data;
+        ApiService.obtenerProvincias().then(function(response){
+            self.provincias = response.data.provincias;
             self.provincia = angular.isUndefined(alumnoEdit) ? undefined : $filter('filter')(self.provincias, { nombre: alumnoEdit.provincia })[0]; 
             $log.info("Prov Selected:"+ JSON.stringify(self.provincia));
         });
@@ -83,11 +88,27 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
     // Metodo que trae los datos de las regiones
     self.obtenerRegiones = function () {
         self.regiones = [];
-        ApiService.obtenerRegiones().then(function(response){
-            self.regiones = response.data;
-            self.nacionalidad = angular.isUndefined(alumnoEdit) ? undefined : $filter('filter')(self.regiones, { gentilicio: alumnoEdit.nacionalidad })[0]; 
+        ApiService.obtenerNacionalidades().then(function(response){
+            self.regiones = response.data.nacionalidades;
+            self.nacionalidad = angular.isUndefined(alumnoEdit) ? undefined : $filter('filter')(self.regiones, { nombre: alumnoEdit.nacionalidad })[0]; 
             $log.info("Nac Selected:"+ JSON.stringify(self.nacionalidad));
         });
+    }
+
+    // Metodo que trae los datos de localidades
+    self.obtenerLocalidades = function () {
+        self.localidades = [];
+        if(!angular.isUndefined(self.provincia)){
+            ApiService.obtenerLocalidadPorProvincia(self.provincia._id).then(function(response){
+                self.localidades = response.data.localidades;
+            });
+        }else{
+            ApiService.obtenerLocalidades().then(function(response){
+            self.localidades = response.data.localidades;
+            self.localidad = angular.isUndefined(alumnoEdit) ? undefined : $filter('filter')(self.localidades, { nombre: alumnoEdit.localidad })[0]; 
+            $log.info("Loc Selected:"+ JSON.stringify(self.localidad));
+            });
+        }
     }
 
     // Metodo para capturar todo los valores de los campos del formulario en un objeto json
@@ -97,7 +118,7 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
             alumno.dni = self.dni;
             alumno.nombre = self.nombre;
             alumno.apellido = self.apellido;
-            alumno.nacionalidad = self.nacionalidad.gentilicio;
+            alumno.nacionalidad = self.nacionalidad.nombre;
             alumno.fecnac = fec;
             alumno.sexo = self.sexo.nombre;
             alumno.fijo = self.fijo;
@@ -249,5 +270,6 @@ function AlumnoModalController(ApiService, $uibModalInstance, $timeout, alumnoEd
 
     self.obtenerPronvincias();
     self.obtenerRegiones();
+    self.obtenerLocalidades();
     self.init();
 }
