@@ -114,7 +114,7 @@ function AlumnoController(ApiService, $log, $uibModal, $timeout, $window, $filte
         alumno += '<pre>';
         alumno += '<em>DNI: </em>'+ item.dni;
         alumno += '<br ><em>Nombre: </em>'+ item.nombre +' '+item.apellido
-        alumno += '<br ><em>Sexo: </em>'+ item.nombre;
+        alumno += '<br ><em>Sexo: </em>'+ item.sexo;
         alumno += '<br ><em>Fecha de Nacimiento: </em>'+ item.fecnac;
         alumno += '<br ><em>Nacionalidad: </em>'+ item.nacionalidad;
         alumno += '<br ><em>Email: </em>'+ item.email;

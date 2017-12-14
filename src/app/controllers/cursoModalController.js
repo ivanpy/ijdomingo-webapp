@@ -47,6 +47,7 @@ function CursoModalController($log, ApiService, $uibModalInstance, $timeout, cur
     self.editar = function () {
         ApiService.editarCurso(self.id, { "nombre" : self.nombre })
            .then(function (response) {
+                self.actualizarInscripciones(cursoEdit.nombre, self.nombre);
                 self.toggl = true; 
                 self.stateEdition = 'editado';
                 $uibModalInstance.close(self);
@@ -56,6 +57,44 @@ function CursoModalController($log, ApiService, $uibModalInstance, $timeout, cur
                 $uibModalInstance.close(self);
            });
     };
+
+    self.actualizarInscripciones = function(cursoNombreAnterior, cursoNombreNuevo){
+        self.actualizarInscripciones = [];
+         ApiService.buscarInscripcionesPorCurso(cursoNombreAnterior).then(function(response){
+                self.actualizarInscripciones = response.data.inscripcionesCurso;
+                angular.forEach(self.actualizarInscripciones, function(item) {
+                    $log.info("editando" + JSON.stringify(item));
+                    self.editarInscripcion(cursoNombreNuevo, item);
+                });
+                
+            });
+    }
+
+    self.editarInscripcion = function (cursoNombreNuevo, data){
+       var inscEdited = new inscripcionJsonBody();
+        inscEdited.dni = data.dni;
+        inscEdited.alumno = data.alumno;
+        inscEdited.fecinsc = data.fecinsc;
+        inscEdited.curso = cursoNombreNuevo;
+        inscEdited.estadoc = data.estadoc;
+        ApiService.editarInscripcion(data._id, inscEdited).then(function (response) {
+            $log.info("success!");
+        }, function (error) {
+            $log.error(error);
+        });
+    }
+
+    // Contrato para guardar alumnos
+    var inscripcionJsonBody = function () {
+        return {
+            "dni" : "",
+            "alumno" : "",
+            "fecinsc" : "",
+            "curso" : "",
+            "estadoc": false,
+            "estado": true
+        }
+    }
 
     // Metodo que cierra el modal
     self.cerrar = function () {

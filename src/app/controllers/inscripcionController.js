@@ -17,6 +17,7 @@ function InscripcionController(ApiService, $log, $uibModal, $timeout, $state){
         }else{
             ApiService.buscarInscripcionesPorCurso(self.filerbyCurso).then(function(response){
                 self.inscripciones = response.data.inscripcionesCurso;
+                $log.info(JSON.stringify(self.inscripciones));
                 self.exportarEXcel();
             });
         }
