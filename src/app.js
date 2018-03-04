@@ -39,7 +39,7 @@
         controller: "HomeController",
         controllerAs: "homeCtrl"
       })
-      .state('inscripciones', {
+      /*.state('inscripciones', {
         url: "/inscripciones",
         templateUrl: "app/views/inscripcion.html",
         controller: "InscripcionController",
@@ -80,7 +80,7 @@
         templateUrl: "app/views/notas.html",
         controller: "NotaController",
         controllerAs: "notaCtrl"
-      })
+      })*/
   });
 
 })(angular)
